@@ -11,6 +11,12 @@
   <a href="https://github.com/mr-ans-2006/yaad/releases/latest"><img src="https://img.shields.io/github/v/release/mr-ans-2006/yaad" alt="Latest release" /></a>
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/03_search_light.png" width="220" alt="Search by meaning: &quot;a tool for data recovery&quot; finds the TestDisk and Recuva screenshots" />
+  <img src="docs/screenshots/06_detail_light.png" width="220" alt="Detail view of a Recuva screenshot with its key line, tags and a tappable recuva.com link" />
+  <img src="docs/screenshots/04_search_dark.png" width="220" alt="Dark mode: searching &quot;seafood place by the sea&quot; finds a Kolachi restaurant screenshot" />
+</p>
+
 Yaad (یاد, "memory") is an open-source Android app that remembers your screenshots for you.
 It reads the text in every screenshot, tags it, and lets you search by **meaning**: type
 *"a tool for data recovery"* and it finds the screenshot that said *"Restore deleted files"*.
