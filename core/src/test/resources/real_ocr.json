@@ -1,0 +1,488 @@
+{
+ "buds": [
+  {
+   "text": "Xiaomi Redmi Buds 5 Wireless Earbuds",
+   "height": 39,
+   "top": 1154,
+   "block": 201
+  },
+  {
+   "text": "Rs. 6,499",
+   "height": 63,
+   "top": 1243,
+   "block": 301
+  },
+  {
+   "text": "Rs. 9,999 -35%",
+   "height": 33,
+   "top": 1336,
+   "block": 401
+  },
+  {
+   "text": "Free Delivery",
+   "height": 37,
+   "top": 1415,
+   "block": 501
+  },
+  {
+   "text": "Add to Cart",
+   "height": 36,
+   "top": 2233,
+   "block": 601
+  }
+ ],
+ "chat": [
+  {
+   "text": "Ahmed",
+   "height": 35,
+   "top": 139,
+   "block": 101
+  },
+  {
+   "text": "online",
+   "height": 24,
+   "top": 195,
+   "block": 201
+  },
+  {
+   "text": "bro send me the DSA notes for",
+   "height": 30,
+   "top": 361,
+   "block": 401
+  },
+  {
+   "text": "tomorrow\u2019s exam",
+   "height": 30,
+   "top": 413,
+   "block": 401
+  },
+  {
+   "text": "ok sending in 5 min",
+   "height": 36,
+   "top": 572,
+   "block": 501
+  },
+  {
+   "text": "Type a message",
+   "height": 36,
+   "top": 2217,
+   "block": 601
+  }
+ ],
+ "dp": [
+  {
+   "text": "11:05 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "Lecture 7: Dynamic",
+   "height": 64,
+   "top": 169,
+   "block": 201
+  },
+  {
+   "text": "Programming",
+   "height": 64,
+   "top": 254,
+   "block": 301
+  },
+  {
+   "text": "Memoization stores the answer to each",
+   "height": 33,
+   "top": 414,
+   "block": 501
+  },
+  {
+   "text": "subproblem so it is never computed twice.",
+   "height": 41,
+   "top": 472,
+   "block": 501
+  },
+  {
+   "text": "Example: Fibonacci with a table, O(n)",
+   "height": 47,
+   "top": 557,
+   "block": 601
+  },
+  {
+   "text": "instead of O(2\u201cn)",
+   "height": 47,
+   "top": 615,
+   "block": 601
+  },
+  {
+   "text": "memo = {}",
+   "height": 47,
+   "top": 748,
+   "block": 701
+  },
+  {
+   "text": "def fib(n):",
+   "height": 39,
+   "top": 832,
+   "block": 702
+  },
+  {
+   "text": "if nin memo: return memo[n]",
+   "height": 39,
+   "top": 912,
+   "block": 702
+  },
+  {
+   "text": "ifn <2: returnn",
+   "height": 28,
+   "top": 994,
+   "block": 702
+  },
+  {
+   "text": "memof[n] = fib(n-1) + fib(n-2)",
+   "height": 39,
+   "top": 1072,
+   "block": 801
+  },
+  {
+   "text": "return memo[n]",
+   "height": 39,
+   "top": 1152,
+   "block": 901
+  }
+ ],
+ "kolachi": [
+  {
+   "text": "9:41 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "Kolachi",
+   "height": 61,
+   "top": 1003,
+   "block": 201
+  },
+  {
+   "text": "4.5 (12,540 reviews)",
+   "height": 39,
+   "top": 1110,
+   "block": 202
+  },
+  {
+   "text": "Seafood restaurant - Rs 5,000-4,000",
+   "height": 35,
+   "top": 1182,
+   "block": 202
+  },
+  {
+   "text": "Do Darya, Phase 8 DHA, Karachi",
+   "height": 37,
+   "top": 1252,
+   "block": 202
+  },
+  {
+   "text": "Open - Closes 1am",
+   "height": 39,
+   "top": 1322,
+   "block": 301
+  },
+  {
+   "text": "Directions Start Call Save",
+   "height": 99,
+   "top": 1416,
+   "block": 401
+  }
+ ],
+ "llama": [
+  {
+   "text": "10:12 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "github.com/ggerganov/llama.cpp",
+   "height": 32,
+   "top": 151,
+   "block": 201
+  },
+  {
+   "text": "ggerganov / llama.cpp",
+   "height": 74,
+   "top": 256,
+   "block": 301
+  },
+  {
+   "text": "Public",
+   "height": 25,
+   "top": 379,
+   "block": 401
+  },
+  {
+   "text": "LLM inference in C/C++",
+   "height": 44,
+   "top": 484,
+   "block": 501
+  },
+  {
+   "text": "68.2k stars 9.8k forks",
+   "height": 29,
+   "top": 581,
+   "block": 601
+  },
+  {
+   "text": "Code Issues Pull requestsActions",
+   "height": 46,
+   "top": 707,
+   "block": 701
+  },
+  {
+   "text": "README.md",
+   "height": 30,
+   "top": 861,
+   "block": 801
+  },
+  {
+   "text": "Inference of Meta\u2019s LLaMA model (and others)",
+   "height": 37,
+   "top": 950,
+   "block": 901
+  },
+  {
+   "text": "in pure C/C++. Plain C/C++ implementation",
+   "height": 35,
+   "top": 1001,
+   "block": 901
+  },
+  {
+   "text": "without any dependencies. Apple silicon is a",
+   "height": 34,
+   "top": 1052,
+   "block": 901
+  },
+  {
+   "text": "first-class citizen.",
+   "height": 27,
+   "top": 1102,
+   "block": 901
+  }
+ ],
+ "quote": [
+  {
+   "text": "9:41 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "\u201cThe best time to plant",
+   "height": 69,
+   "top": 721,
+   "block": 201
+  },
+  {
+   "text": "a tree was 20 years ago.",
+   "height": 56,
+   "top": 816,
+   "block": 201
+  },
+  {
+   "text": "The second best time is",
+   "height": 55,
+   "top": 913,
+   "block": 201
+  },
+  {
+   "text": "now.\u201d",
+   "height": 55,
+   "top": 1009,
+   "block": 201
+  },
+  {
+   "text": "\u2014 Chinese proverb",
+   "height": 41,
+   "top": 1137,
+   "block": 301
+  }
+ ],
+ "recuva": [
+  {
+   "text": "9:41 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "recuva.com",
+   "height": 20,
+   "top": 149,
+   "block": 201
+  },
+  {
+   "text": "Recuva",
+   "height": 86,
+   "top": 335,
+   "block": 301
+  },
+  {
+   "text": "Restore deleted files",
+   "height": 47,
+   "top": 477,
+   "block": 401
+  },
+  {
+   "text": "Accidentally deleted an important file? Lost",
+   "height": 36,
+   "top": 592,
+   "block": 501
+  },
+  {
+   "text": "something important when your computer",
+   "height": 36,
+   "top": 644,
+   "block": 501
+  },
+  {
+   "text": "crashed? No problem! Recuva recovers files",
+   "height": 36,
+   "top": 696,
+   "block": 501
+  },
+  {
+   "text": "from your Windows computer, recycle bin,",
+   "height": 36,
+   "top": 748,
+   "block": 501
+  },
+  {
+   "text": "digital camera card, or MPS player.",
+   "height": 36,
+   "top": 800,
+   "block": 501
+  }
+ ],
+ "spoon": [
+  {
+   "text": "9:41 87%",
+   "height": 31,
+   "top": 35,
+   "block": 101
+  },
+  {
+   "text": "Ayesha",
+   "height": 41,
+   "top": 177,
+   "block": 201
+  },
+  {
+   "text": "@ayesha_tips",
+   "height": 32,
+   "top": 231,
+   "block": 201
+  },
+  {
+   "text": "Life hack:",
+   "height": 40,
+   "top": 345,
+   "block": 301
+  },
+  {
+   "text": "Put a wooden spoon across a pot of",
+   "height": 47,
+   "top": 422,
+   "block": 302
+  },
+  {
+   "text": "boiling water and it won\u2019t boil over.",
+   "height": 49,
+   "top": 487,
+   "block": 302
+  },
+  {
+   "text": "Works every time.",
+   "height": 39,
+   "top": 554,
+   "block": 302
+  },
+  {
+   "text": "Reply Repost Like Share",
+   "height": 32,
+   "top": 1415,
+   "block": 501
+  }
+ ],
+ "testdisk": [
+  {
+   "text": "8:20 87%",
+   "height": 29,
+   "top": 36,
+   "block": 101
+  },
+  {
+   "text": "cqsecurity.org/wiki/TestDisk",
+   "height": 34,
+   "top": 142,
+   "block": 201
+  },
+  {
+   "text": "TestDisk Step By Step",
+   "height": 67,
+   "top": 299,
+   "block": 301
+  },
+  {
+   "text": "TestDisk is powerful free data recovery",
+   "height": 37,
+   "top": 433,
+   "block": 401
+  },
+  {
+   "text": "software! It was primarily designed to help",
+   "height": 37,
+   "top": 487,
+   "block": 401
+  },
+  {
+   "text": "recover lost partitions and/or make",
+   "height": 37,
+   "top": 541,
+   "block": 401
+  },
+  {
+   "text": "non-booting disks bootable again.",
+   "height": 37,
+   "top": 595,
+   "block": 401
+  },
+  {
+   "text": "TestDisk 7.2, Data Recovery Utility",
+   "height": 32,
+   "top": 717,
+   "block": 501
+  },
+  {
+   "text": "Christophe GRENIER",
+   "height": 32,
+   "top": 797,
+   "block": 601
+  },
+  {
+   "text": "Disk /dev/sda - 500 GB",
+   "height": 32,
+   "top": 957,
+   "block": 701
+  },
+  {
+   "text": ">[Proceed ] [ Quit ]",
+   "height": 43,
+   "top": 1031,
+   "block": 801
+  },
+  {
+   "text": "Analyse Advanced Geometry",
+   "height": 32,
+   "top": 1197,
+   "block": 901
+  }
+ ]
+}

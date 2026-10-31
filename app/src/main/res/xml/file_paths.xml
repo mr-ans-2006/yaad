@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lets "Open in gallery" show images that were shared into Yaad (they live in Yaad's private folder). -->
+<paths>
+    <files-path name="shared" path="shared/" />
+</paths>

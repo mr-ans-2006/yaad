@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- hard shadow -->
+    <path android:fillColor="#111111" android:pathData="M37,37h42v42h-42z"/>
+    <!-- card with thick outline -->
+    <path android:fillColor="#111111" android:pathData="M31,31h42v42h-42z"/>
+    <path android:fillColor="#00000000" android:pathData="M34,34h36v36h-36z"/>
+    <!-- pixel Y -->
+    <path android:fillColor="#111111" android:pathData="M40.25,41.25h5.5v5.5h-5.5zM62.25,41.25h5.5v5.5h-5.5zM40.25,46.75h5.5v5.5h-5.5zM62.25,46.75h5.5v5.5h-5.5zM45.75,52.25h5.5v5.5h-5.5zM56.75,52.25h5.5v5.5h-5.5zM51.25,57.75h5.5v5.5h-5.5zM51.25,63.25h5.5v5.5h-5.5z"/>
+    <!-- pink folder tab -->
+    <path android:fillColor="#111111" android:pathData="M36,25h16v6h-16z"/>
+    <path android:fillColor="#111111" android:pathData="M38,27h12v4h-12z"/>
+</vector>
