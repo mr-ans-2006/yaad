@@ -198,12 +198,11 @@ Run it yourself with `./gradlew :core:benchmark` (code in
 
 ## Known limitations
 
-- **English only.** Text is read with ML Kit's Latin-script recognizer, and the search model is English.
-  Urdu or Sindhi script isn't read properly: such a screenshot comes back with no text or a few stray
-  Latin characters. With no text it's saved as "No text found", stays in your library, and can never come
-  up in a search. Yaad doesn't warn you when this happens. Searching *in* Urdu doesn't work either: the
-  model only sees single Urdu letters. (Roman Urdu written in English letters is read, and exact-word
-  search works for it.)
+- **English only.** English text is read reliably. Urdu/Sindhi script is not read — those screenshots are saved
+  with no text ("No text found", or at most a few stray Latin characters), stay in your library, and cannot be searched.
+  Yaad doesn't warn you when this happens. Roman Urdu written in English letters works, including exact-word
+  search. Urdu-script search does not work: the model sees only single Urdu letters. (Text is read with ML Kit's
+  Latin-script recognizer, and the search model is English.)
 - **Tested on one real phone so far** (the maintainer's Oppo Reno 6). Everything else is automated
   tests and screens rendered on a computer. Other phones may behave differently; reports are welcome.
 - **Battery guide buttons** open each brand's known settings page, but these move between OS versions,
