@@ -38,6 +38,9 @@ the test tells you exactly which search got worse.
 | Change search ranking | `core/.../SearchRanker.kt` (weights and the 0.27 "meaning floor") |
 | Change which folders count as screenshots | `app/.../pickup/ScreenshotFinder.kt` |
 | Change background checking | `app/.../pickup/AutoPick.kt` |
+| Reword battery-guide steps or buttons | `core/.../BatteryGuides.kt` |
+| Change which phone maker gets which guide | `core/.../PhoneBrand.kt` (see "Adding a phone brand" below) |
+| Change the battery guide's layout | `ui/screens/BatteryGuideScreen.kt` |
 | Change what's stored per screenshot | `app/.../data/Shot.kt` (see "Database changes" below) |
 
 ## 4. Database changes (important)
@@ -55,6 +58,31 @@ If you add a column to `Shot`, people who already have Yaad installed have the O
    and register it: `Room.databaseBuilder(...).addMigrations(MIGRATION_1_2).build()`.
 
 Without a migration the app crashes on update. Never skip this step.
+
+## 4a. Adding a phone brand to the battery guide
+
+Example: adding Huawei / Honor (EMUI / MagicOS).
+
+1. **`core/.../PhoneBrand.kt`**: add an entry to the enum, e.g.
+   `HUAWEI("Huawei · Honor", "EMUI / MagicOS", "Huawei and Honor phones"),`
+   and add its maker words to `wordsToBrand`: `"huawei" to HUAWEI, "honor" to HUAWEI`.
+   (Find the real maker name for a phone by searching "Build.MANUFACTURER <phone>", or install a
+   device-info app on that phone.)
+2. **`core/.../BatteryGuides.kt`**: write `val huawei = BatteryGuide(PhoneBrand.HUAWEI, "intro…", listOf(GuideStep(…)))`
+   and add it to the `all` list. Use [dontkillmyapp.com](https://dontkillmyapp.com) for the steps
+   (write them in your own words). For buttons, put the brand's settings screens first with
+   `SettingsTarget.component("package", "full.class.Name")`, then end the list with `thenAppInfo`
+   or `thenBattery`. The test checks every button ends with those.
+3. **`ui/screens/BatteryGuideScreen.kt`**: give it a colour in `PhoneBrand.accent()`. Kotlin will
+   refuse to build until you do, because that `when` must cover every brand.
+4. **`core/src/test/.../BatteryGuideTest.kt`**: add its maker names to `detectsEachMaker`.
+5. Run `./gradlew :core:test`, then `./gradlew :app:recordRoborazziDebug` and add a screenshot test
+   for the new brand in `ScreenshotsTest.kt` if you like.
+6. Add a row to the battery table in `README.md`.
+
+Component names are unofficial and change between phone versions. If someone reports that a button
+opened the wrong page, find the right screen with `adb shell dumpsys activity activities | grep mResumedActivity`
+while that page is open on their phone, and add it to the front of the list.
 
 ## 5. Your signing key (keep it safe!)
 
@@ -105,11 +133,13 @@ The model files are in `app/src/main/assets/model/`. If you swap in another mode
 
 ## 9. Testing on a real phone
 
-The automatic tests can't run Google's text reader or ColorOS's battery rules (those only exist on a
-phone). Before a release, check on your Reno 6:
+The automatic tests can't run Google's text reader or the phone makers' battery rules (those only
+exist on a phone). Before a release, check on your Reno 6:
 - take a screenshot with Yaad closed → open Yaad → it appears, read and tagged,
 - share an image from WhatsApp to "Save to Yaad",
 - search with words that are *not* in the screenshot,
 - tap a link in "All text" and in "Links",
 - switch dark mode,
+- open the Battery guide: your brand should be listed under YOUR PHONE, and each button should open a
+  Settings page (the exact one, or Yaad's app info / the battery list as a backup),
 - turn on airplane mode and do everything again: nothing should change.

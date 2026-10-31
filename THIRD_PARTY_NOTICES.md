@@ -1,6 +1,10 @@
 # Third-party notices
 
-Yaad's own code is MIT licensed (see `LICENSE`). It ships with these pieces made by others:
+Yaad's own source code is MIT licensed (see `LICENSE`). That license covers only Yaad's own code.
+The fonts, the search model and the libraries listed below are made by others and keep their own
+licenses, listed in the table below (the font license texts are in the `licenses/` folder).
+
+Yaad ships with these pieces made by others:
 
 | What | Used for | License |
 |---|---|---|

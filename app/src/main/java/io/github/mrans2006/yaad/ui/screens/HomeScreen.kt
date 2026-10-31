@@ -1,5 +1,6 @@
 package io.github.mrans2006.yaad.ui.screens
 
+import io.github.mrans2006.yaad.core.PhoneBrand
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -95,7 +96,7 @@ fun HomeScreen(state: HomeState, actions: HomeActions) {
             if (!state.hasPermission) item(span = full, key = "perm") { PermissionCard(actions.onAskPermission) }
             if (state.pending > 0) item(span = full, key = "progress") { ProgressCard(state) }
             if (state.showBatteryTip && state.hasPermission && state.query.isEmpty()) {
-                item(span = full, key = "battery") { BatteryTip(actions.onBatteryGuide, actions.onDismissBatteryTip) }
+                item(span = full, key = "battery") { BatteryTip(state.phoneBrand, actions.onBatteryGuide, actions.onDismissBatteryTip) }
             }
 
             item(span = full, key = "count") { CountLine(state) }
@@ -217,7 +218,7 @@ private fun PermissionCard(onAsk: () -> Unit) {
 }
 
 @Composable
-private fun BatteryTip(onOpen: () -> Unit, onDismiss: () -> Unit) {
+private fun BatteryTip(brand: PhoneBrand, onOpen: () -> Unit, onDismiss: () -> Unit) {
     BrutalBox(Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp), fill = Palette.Green) {
         Column(Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -227,7 +228,9 @@ private fun BatteryTip(onOpen: () -> Unit, onDismiss: () -> Unit) {
                 Icon(Icons.Rounded.Close, "Dismiss", tint = Palette.Ink, modifier = Modifier.clickable(onClick = onDismiss))
             }
             Spacer(Modifier.height(4.dp))
-            Text("Oppo phones put apps to sleep. One setting lets Yaad catch screenshots the moment you take them.",
+            // Names your phone's brand when we know it ("Samsung phones put apps to sleep…").
+            val who = if (brand == PhoneBrand.GENERIC) "Many phones put apps to sleep to save battery." else "${brand.phonesName} put apps to sleep to save battery."
+            Text("$who A couple of settings let Yaad catch screenshots the moment you take them.",
                 style = YaadType.body, color = Palette.Ink)
             Spacer(Modifier.height(12.dp))
             BrutalButton("Show me how", onOpen)

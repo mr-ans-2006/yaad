@@ -1,5 +1,7 @@
 package io.github.mrans2006.yaad.ui
 
+import io.github.mrans2006.yaad.battery.ThisPhone
+import io.github.mrans2006.yaad.core.PhoneBrand
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
@@ -35,6 +37,8 @@ data class HomeState(
     val progressTotal: Int = 0,
     val hasPermission: Boolean = true,
     val showBatteryTip: Boolean = false,
+    /** This phone's family (Samsung, Xiaomi, …), so the battery tip can name it. */
+    val phoneBrand: PhoneBrand = PhoneBrand.GENERIC,
     val loaded: Boolean = false,
 ) {
     /** What the grid should show right now: search results or all screenshots, filtered by tag. */
@@ -86,6 +90,7 @@ class YaadViewModel(app: Application) : AndroidViewModel(app) {
             progressTotal = prog.second,
             hasPermission = flags.first,
             showBatteryTip = !flags.second && !flags.third,
+            phoneBrand = ThisPhone.brand,
             loaded = true,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeState())

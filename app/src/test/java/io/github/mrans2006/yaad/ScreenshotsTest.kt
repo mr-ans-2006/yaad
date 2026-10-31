@@ -18,6 +18,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.mrans2006.yaad.data.Shot
 import io.github.mrans2006.yaad.ui.HomeState
 import io.github.mrans2006.yaad.ui.components.LocalPreviewImages
+import io.github.mrans2006.yaad.core.PhoneBrand
 import io.github.mrans2006.yaad.ui.screens.BatteryActions
 import io.github.mrans2006.yaad.ui.screens.BatteryGuideScreen
 import io.github.mrans2006.yaad.ui.screens.DetailActions
@@ -120,7 +121,26 @@ class ScreenshotsTest {
         OnboardingScreen(OnboardingStep.Import(412), OnboardingActions())
     }
 
-    @Test fun battery() = shoot("10_battery_guide", ThemeMode.LIGHT) { BatteryGuideScreen(false, BatteryActions()) }
+    @Test fun battery() = shoot("10_battery_guide", ThemeMode.LIGHT) { BatteryGuideScreen(false, PhoneBrand.SAMSUNG, BatteryActions()) }
+
+    // Full-length battery guides, as each brand's phone would show them (tall canvas so nothing is cut off).
+    @Test @Config(qualifiers = "w411dp-h1900dp-xxhdpi")
+    fun batterySamsung() = shoot("13_battery_samsung", ThemeMode.LIGHT) { BatteryGuideScreen(false, PhoneBrand.SAMSUNG, BatteryActions()) }
+
+    @Test @Config(qualifiers = "w411dp-h1900dp-xxhdpi")
+    fun batteryXiaomi() = shoot("14_battery_xiaomi", ThemeMode.LIGHT) { BatteryGuideScreen(false, PhoneBrand.XIAOMI, BatteryActions()) }
+
+    @Test @Config(qualifiers = "w411dp-h1900dp-xxhdpi")
+    fun batteryTranssion() = shoot("15_battery_infinix_tecno", ThemeMode.LIGHT) { BatteryGuideScreen(false, PhoneBrand.TRANSSION, BatteryActions()) }
+
+    @Test @Config(qualifiers = "w411dp-h1900dp-xxhdpi")
+    fun batteryVivo() = shoot("16_battery_vivo", ThemeMode.LIGHT) { BatteryGuideScreen(true, PhoneBrand.VIVO, BatteryActions()) }
+
+    // An Oppo phone with the Samsung guide opened under "Other phones", in dark mode.
+    @Test @Config(qualifiers = "w411dp-h2800dp-xxhdpi")
+    fun batteryOtherPhones() = shoot("17_battery_other_phones_dark", ThemeMode.DARK) {
+        BatteryGuideScreen(false, PhoneBrand.OPPO, BatteryActions(), openBrand = PhoneBrand.SAMSUNG)
+    }
 
     @Test @Config(qualifiers = "w200dp-h200dp-xxhdpi")
     fun appIcon() = shoot("12_app_icon", ThemeMode.LIGHT) {

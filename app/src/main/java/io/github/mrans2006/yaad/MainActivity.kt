@@ -1,7 +1,6 @@
 package io.github.mrans2006.yaad
 
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -33,6 +32,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import io.github.mrans2006.yaad.battery.SettingsDoors
+import io.github.mrans2006.yaad.battery.ThisPhone
+import io.github.mrans2006.yaad.core.BatteryGuides
+import io.github.mrans2006.yaad.core.GuideButton
 import io.github.mrans2006.yaad.data.Shot
 import io.github.mrans2006.yaad.pickup.AutoPick
 import io.github.mrans2006.yaad.pickup.Permissions
@@ -182,11 +185,11 @@ class MainActivity : ComponentActivity() {
                 }
                 BatteryGuideScreen(
                     batteryOk,
+                    ThisPhone.brand,
                     BatteryActions(
                         onBack = { nav.popBackStack() },
-                        onOpenBatterySettings = ::openBatterySettings,
-                        onOpenAppInfo = ::openAppInfo,
-                        onOpenAutoLaunch = ::openAutoLaunch,
+                        onButton = ::openGuideButton,
+                        onMoreHelp = { openLink(BatteryGuides.MORE_HELP_URL) },
                     ),
                 )
             }
@@ -209,22 +212,16 @@ class MainActivity : ComponentActivity() {
     private fun openAppInfo() =
         tryStart(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))) {}
 
-    private fun openBatterySettings() =
-        tryStart(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) { openAppInfo() }
-
-    /** ColorOS hides its "auto launch" page in different places on different versions. Try them all. */
-    private fun openAutoLaunch() {
-        val candidates = listOf(
-            ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"),
-            ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity"),
-            ComponentName("com.oplus.safecenter", "com.oplus.safecenter.permission.startup.StartupAppListActivity"),
-            ComponentName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity"),
-        )
-        for (c in candidates) {
-            try { startActivity(Intent().setComponent(c)); return } catch (_: Exception) { }
+    /**
+     * A battery-guide button was tapped. SettingsDoors tries each Settings screen the
+     * button lists (brand screens first, then standard Android ones) and never crashes.
+     */
+    private fun openGuideButton(button: GuideButton) {
+        when (SettingsDoors.open(this, button)) {
+            0 -> Unit // the exact page opened
+            -1 -> toast("Couldn't open Settings here. Open Settings yourself and follow the steps.")
+            else -> toast("Opened the closest settings page on this phone. Look for Yaad there.")
         }
-        toast("Couldn't open it directly. Opening Yaad's app info instead.")
-        openAppInfo()
     }
 
     private fun tryStart(intent: Intent, otherwise: () -> Unit) {

@@ -66,11 +66,41 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 1. Download `Yaad-v1.0.apk` (from the Releases page).
 2. Open it on your phone. Android will ask to allow installing from this source: allow it.
 3. Open Yaad, tap **Let's go**, allow photo access, and choose **Import all** or **Only new ones**.
-4. **On Oppo / Realme / OnePlus (ColorOS):** follow the in-app **Battery guide** so auto-pick keeps
-   working while Yaad is closed. Even without it, Yaad catches up every time you open it.
+4. Follow the in-app **Battery guide** (Settings → Battery guide) so auto-pick keeps working while
+   Yaad is closed. It shows the steps for your phone's brand first. Even without it, Yaad catches up
+   every time you open it.
 
 Needs Android 8.0 or newer on a 64-bit (arm64) phone, which covers almost every phone from the last 6 years.
 The release APK is about 32 MB, mostly the text reader and the search model.
+
+## Battery guide (keeping auto-pick awake)
+
+Many phone makers add their own battery savers that close apps in the background, so a new screenshot
+may wait until you open Yaad. The in-app **Battery guide** fixes that. Yaad reads your phone's maker
+name and shows **your phone's steps first**, with every other brand under **Other phones**.
+
+| Phones | System | What the guide walks you through |
+|---|---|---|
+| Samsung | One UI | Battery → Unrestricted, take Yaad out of Sleeping / Deep sleeping apps, add it to Never sleeping apps |
+| Xiaomi · Redmi · POCO | MIUI / HyperOS | Autostart on, Battery saver → No restrictions, lock in Recents |
+| Vivo · iQOO | Funtouch OS / OriginOS | Auto-start on, allow background power use, lock in Recents |
+| Infinix · Tecno · itel | XOS / HiOS | Phone Master → Auto-start management (Launch manager), app power saving off, lock in Recents |
+| Oppo · Realme · OnePlus | ColorOS / OxygenOS | Allow background activity, Auto launch on, lock in Recents |
+| Pixel & other phones | Android | Battery → Unrestricted, don't pause when unused |
+
+The buttons try to open the exact settings page for your brand. Phone makers move these pages between
+versions, so if one isn't there Yaad opens the closest standard Android page instead (battery
+optimisation or Yaad's app info). It never crashes. Yaad does **not** ask for the special
+"ignore battery optimisations" permission; you stay in control of the switch.
+
+<p align="center">
+  <img src="docs/screenshots/13_battery_samsung.png" width="200" />
+  <img src="docs/screenshots/14_battery_xiaomi.png" width="200" />
+  <img src="docs/screenshots/15_battery_infinix_tecno.png" width="200" />
+</p>
+
+Phone not listed, or still stopping? [dontkillmyapp.com](https://dontkillmyapp.com) has detailed steps
+for almost every phone. Yaad's guides are based on it.
 
 ## Build it yourself
 

@@ -139,6 +139,29 @@ source code"). A screenshot's score for a tag = keyword points + how close its m
 Above 0.35 it gets the tag (at most 3, and only ones close to the best).
 **To add a tag:** add an entry in `Tags.kt` and a colour in `ui/theme/Color.kt` (`tagColor`). Done.
 
+### `PhoneBrand.kt` + `BatteryGuides.kt`: the battery guide's content
+Phone makers (Samsung, Xiaomi, Vivo, Infinix, Tecno, Oppo…) add their own battery savers, and each
+one hides the switches somewhere different. These two files hold everything the battery guide says.
+
+- **`PhoneBrand`** is an `enum class`: a fixed list of choices (`SAMSUNG`, `XIAOMI`, `VIVO`,
+  `TRANSSION`, `OPPO`, `GENERIC`). Brands that share the same system software share one entry:
+  Realme and OnePlus run ColorOS like Oppo, and Infinix, Tecno and itel are all made by Transsion.
+- **`PhoneBrand.detect(manufacturer, brand)`** turns Android's maker name into one of those choices.
+  Android gives us strings like `"samsung"`, `"INFINIX MOBILITY LIMITED"` or `"Xiaomi"`. We lower-case
+  the text, split it into words, and look each word up in a small map (`"tecno" → TRANSSION`).
+  Whole words only, so `"itel"` can't match inside `"satellite"`. Unknown makers (Google, Motorola…)
+  get `GENERIC`, the plain Android guide.
+- **`BatteryGuides`** is an `object` (a single shared instance) holding one `BatteryGuide` per brand.
+  A guide is a list of `GuideStep`s (title + instructions + buttons). A `GuideButton` holds a list
+  of `SettingsTarget`s: places in Settings to try, in order. A target is either a **component**
+  (a specific screen inside another app, written as package + class name, like Xiaomi's
+  `com.miui.securitycenter` / `…AutoStartManagementActivity`) or a standard Android **action**.
+- Every button's list ends with two screens that exist on every phone: the battery optimisation list
+  and Yaad's App info. So even if a brand screen is missing, something useful opens.
+
+Why is this in `core/` and not `app/`? Because it's plain data with no Android code, it can be
+tested on a computer (`BatteryGuideTest`). The app turns the descriptions into real Intents.
+
 ---
 
 ## 4. The Android app: `app/`
@@ -185,7 +208,24 @@ Appears in the share sheet as "Save to Yaad". It has no screen: copies the image
 ### `MainActivity.kt`: the window and navigation
 The app has one Activity. Inside it, **Navigation Compose** switches between screens by route name:
 `"home"`, `"shot/{id}"`, `"settings"`, `"battery"`. It also opens other apps: the browser for links,
-the gallery, and the battery settings (with several ColorOS-specific guesses for "auto launch").
+the gallery, and the battery guide's Settings pages. It works out the phone's brand once
+(`ThisPhone.brand`) and hands it to the battery screen.
+
+### `battery/SettingsDoors.kt`: opening other apps' settings safely
+An **Intent** is a message to Android saying "please open this". `SettingsDoors.toIntent()` turns a
+`SettingsTarget` from `core/` into an Intent: a component Intent (`setComponent(...)`) or an action
+Intent (`Intent("android.settings.…")`). It fills in Yaad's package name where a screen needs to know
+which app to show (`package:io.github.mrans2006.yaad`, or Xiaomi's `package_name` extra).
+
+`SettingsDoors.open()` tries the targets one by one inside `try { … } catch`. If a screen doesn't
+exist on this phone, Android throws `ActivityNotFoundException`; if it exists but is private, it throws
+`SecurityException`. We catch both and move to the next target, so a missing screen can never crash
+Yaad. It returns which target opened (0 = the best one), and MainActivity shows a small message if
+only a backup page opened. `ThisPhone.brand` reads `Build.MANUFACTURER` and `Build.BRAND` and calls
+`PhoneBrand.detect()`; `by lazy` means it's worked out the first time it's used, then remembered.
+
+Note: opening another app's screen with an explicit component needs no permission and no
+`<queries>` entry in the manifest. (Only *asking* Android whether an app is installed would.)
 
 ### `ui/YaadViewModel.kt`: the bridge
 Screens shouldn't talk to the database directly. The ViewModel combines several streams (all
@@ -205,6 +245,14 @@ coloured tab on top, like a file folder.
 
 ### `ui/screens/`
 `HomeScreen`, `DetailScreen`, `OnboardingScreen`, `SettingsScreen`, `BatteryGuideScreen`.
+
+`BatteryGuideScreen(batteryOk, myBrand, actions)` draws: a green/pink status box, then **YOUR PHONE**
+with that brand's steps, then **OTHER PHONES**: one bar per other brand. Tapping a bar opens its steps
+(`rememberSaveable` remembers which one is open, even if you rotate the phone). Each brand has its own
+accent colour (`PhoneBrand.accent()`). The screen never opens Settings itself: a button calls
+`actions.onButton(button)` and MainActivity does the opening. That keeps the screen easy to preview
+and screenshot. The home screen's battery tip (`BatteryTip` in `HomeScreen.kt`) uses
+`HomeState.phoneBrand` to say "Samsung phones put apps to sleep…" (or "Many phones…" when unknown).
 Each one takes a *state* (what to show) and *actions* (what happens on tap). That makes them easy to
 preview and test, and is why the screenshot tests can draw them with sample data.
 
@@ -233,6 +281,7 @@ preview and test, and is why the screenshot tests can draw them with sample data
 | `core/.../SearchTest` | 13 realistic searches find the right screenshot first |
 | `core/.../RealOcrTest` | The same, using text from a real OCR engine (messy on purpose) |
 | `core/.../TaggerTest`, `KeyLineTest`, `LinkFinderTest` | Tags, key lines and links |
+| `core/.../BatteryGuideTest` | Maker names (`"samsung"`, `"TECNO MOBILE LIMITED"`, `"POCO"`, `"Google"`…) pick the right guide; every guide has steps; every button ends with screens that always exist |
 | `core/.../SpeedTest` | Prints how fast embedding and ranking are |
 | `app/.../AutoPickTest` | Auto-pick against a pretend Android 13 gallery: which folders, new/deleted/ignored, permissions, jobs |
 | `app/.../ScreenshotsTest` | Draws every screen to `docs/screenshots/` |
@@ -245,4 +294,6 @@ preview and test, and is why the screenshot tests can draw them with sample data
 2. **Add a tag**, like "Recipes": add it to `Tags.kt` with keywords and 3 example sentences, give it a
    colour in `tagColor()`, and add a test sample in `core/src/test/.../Samples.kt`.
 3. **Make the word match stronger.** In `SearchRanker.kt`, change `0.35f` to `0.5f` and run `./gradlew :core:test`.
-4. **Show more of the key line.** In `HomeScreen.kt` → `ShotCard`, change `maxLines = 4`.
+4. **Reword a battery step.** Edit the text in `core/.../BatteryGuides.kt`, then run
+   `./gradlew :app:recordRoborazziDebug` and look at `docs/screenshots/13_battery_samsung.png`.
+5. **Show more of the key line.** In `HomeScreen.kt` → `ShotCard`, change `maxLines = 4`.
