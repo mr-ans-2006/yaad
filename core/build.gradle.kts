@@ -21,4 +21,19 @@ tasks.test {
     // The tests load the real model from the app's assets folder.
     systemProperty("yaad.assets", rootProject.file("app/src/main/assets").absolutePath)
     testLogging { events("passed", "failed"); showStandardStreams = true }
+    // The speed benchmark is slow and machine-dependent, so it only runs with :core:benchmark.
+    filter { excludeTestsMatching("*SearchBenchmark") }
+}
+
+// ./gradlew :core:benchmark  ->  search speed at 500 / 1,000 / 2,000 screenshots (see SearchBenchmark.kt)
+tasks.register<Test>("benchmark") {
+    description = "Times hybrid search at 500, 1,000 and 2,000 fake screenshots."
+    group = "verification"
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    filter { includeTestsMatching("*SearchBenchmark") }
+    systemProperty("yaad.assets", rootProject.file("app/src/main/assets").absolutePath)
+    systemProperty("yaad.bench", "true")
+    testLogging { showStandardStreams = true }
+    outputs.upToDateWhen { false }
 }

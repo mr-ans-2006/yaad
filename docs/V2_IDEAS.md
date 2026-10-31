@@ -35,5 +35,5 @@ Roughly in order of "most useful for the effort".
 - An approximate-nearest-neighbour index only matters past ~50,000 screenshots. Not needed yet.
 
 ## Distribution
-- **GitHub Releases** first (free), then **F-Droid** (after the OCR swap) or **Google Play**
+- **GitHub Releases**: done, see [v1.0](https://github.com/mr-ans-2006/yaad/releases/tag/v1.0). Next: **F-Droid** (after the OCR swap) or **Google Play**
   ($25 once; needs a privacy policy page, which is easy since Yaad collects nothing).

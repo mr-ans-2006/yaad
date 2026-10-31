@@ -4,6 +4,12 @@
 
 <h1 align="center">Yaad · یاد</h1>
 <p align="center"><b>Never lose a screenshot again.</b></p>
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT" /></a>
+  <a href="app/build.gradle.kts"><img src="https://img.shields.io/badge/min%20SDK-26%20%28Android%208.0%29-brightgreen" alt="Min SDK 26" /></a>
+  <a href="#privacy"><img src="https://img.shields.io/badge/internet%20permission-none-success" alt="No internet permission" /></a>
+  <a href="https://github.com/mr-ans-2006/yaad/releases/latest"><img src="https://img.shields.io/github/v/release/mr-ans-2006/yaad" alt="Latest release" /></a>
+</p>
 
 Yaad (یاد, "memory") is an open-source Android app that remembers your screenshots for you.
 It reads the text in every screenshot, tags it, and lets you search by **meaning**: type
@@ -24,6 +30,15 @@ Everything happens on your phone. No account, no server, and **no internet permi
 
 <sub>These images are rendered from the app's real screen code on a computer (with Roborazzi),
 using sample screenshots as the gallery content.</sub>
+
+## Why I built this
+
+I take screenshots of everything: notes, links I want to read later, receipts, code snippets, bits of chats.
+They pile up fast, and whenever I needed one I couldn't find it. The gallery's
+search doesn't read the text inside a screenshot, and the tools that do mostly upload your screenshots to
+the cloud, which I didn't want for private things like chats and receipts. I'm a CS student in Karachi,
+and Yaad is my attempt at fixing this for myself: read the text on the phone, and let me search for a
+screenshot by what I remember about it.
 
 ## What it does
 
@@ -63,7 +78,7 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Install
 
-1. Download `Yaad-v1.0.apk` (from the Releases page).
+1. Download [**Yaad-v1.0.apk**](https://github.com/mr-ans-2006/yaad/releases/download/v1.0/Yaad-v1.0.apk) (32 MB) from the [v1.0 release](https://github.com/mr-ans-2006/yaad/releases/tag/v1.0).
 2. Open it on your phone. Android will ask to allow installing from this source: allow it.
 3. Open Yaad, tap **Let's go**, allow photo access, and choose **Import all** or **Only new ones**.
 4. Follow the in-app **Battery guide** (Settings → Battery guide) so auto-pick keeps working while
@@ -102,21 +117,6 @@ optimisation or Yaad's app info). It never crashes. Yaad does **not** ask for th
 Phone not listed, or still stopping? [dontkillmyapp.com](https://dontkillmyapp.com) has detailed steps
 for almost every phone. Yaad's guides are based on it.
 
-## Build it yourself
-
-You need JDK 17 and the Android SDK (Android Studio includes both).
-
-```bash
-git clone https://github.com/mr-ans-2006/yaad.git
-cd yaad
-./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
-./gradlew :core:test             # tokenizer, search model, ranking, tags, key line
-./gradlew :app:testDebugUnitTest # auto-pick logic against a pretend gallery
-./gradlew :app:recordRoborazziDebug   # re-draw the screenshots in docs/screenshots
-```
-
-A signed release build needs your own signing key. See [docs/MAINTAINING.md](docs/MAINTAINING.md).
-
 ## How it works (plain English)
 
 1. **Noticing.** Android keeps a list of every photo (the "MediaStore"). Yaad watches that list.
@@ -130,6 +130,104 @@ A signed release build needs your own signing key. See [docs/MAINTAINING.md](doc
    (that takes milliseconds) and adds a bonus for exact word matches. Best matches come first.
 
 The full beginner tour of the code is in [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
+
+## Architecture
+
+```
+  Screenshots
+  new one in the gallery (MediaStore observer, WorkManager      Share to Yaad / Add
+  content trigger, hourly job, catch-up when the app opens)            │
+                     │                                                 │
+                     └──────────────► Room DB: new row, PENDING ◄──────┘
+                                              │
+                                              ▼
+                        ML Kit OCR (Latin script, bundled, offline)
+                        → lines of text + how tall each line is
+                                              │
+                                              ▼
+            core/  key line · links · embeddings · auto-tags
+                   embeddings = all-MiniLM-L6-v2 (int8 ONNX), 384 numbers
+                   per chunk of up to 120 words, at most 4 chunks
+                                              │
+                                              ▼
+                        Room DB: text, key line, tags, links, vectors
+                        (all rows are kept in memory for searching)
+                                              │
+  your search ──► MiniLM embedding ───────────┐
+                                              ▼
+            core/  Hybrid search: meaning score + exact-word bonus
+                   → best 100 results
+```
+
+**Why hybrid search.** Meaning search alone is bad at exact names. A small English model doesn't
+really know what "llama.cpp" or "kolachi" is, so a screenshot that literally says it can lose to one
+that is only vaguely similar. So each screenshot's score adds two things (see
+[`SearchRanker.kt`](core/src/main/kotlin/io/github/mrans2006/yaad/core/SearchRanker.kt)):
+
+- **Meaning:** cosine similarity between your search and the screenshot (its best-matching chunk), up to 1.
+- **Exact words:** + 0.35 × the share of your search words found in the text (common words like
+  "the" or "find" are skipped; "llama.cpp", "c++" and "c#" stay whole), + 0.15 if your whole search
+  appears as written, + 0.10 if a word is one of the screenshot's tags.
+
+A screenshot with a meaning score under 0.27 is only shown if at least one word or tag matches.
+
+**Why `core/` and `app/`.** `core/` is plain Kotlin with no Android dependency, so the search, tagging and
+key-line logic is unit-tested on a normal computer's JVM in seconds, without a phone or emulator.
+
+## Benchmarks
+
+Search time for one query (*"how to run llama.cpp on android"*), median of 20 runs after 10 warm-ups:
+
+| Screenshots | Search (ranking) | Query embedding + search | Real device (Oppo Reno 6) |
+|---:|---:|---:|:---:|
+| ~500 | 17 ms | 20 ms | pending |
+| ~1,000 | 30 ms | 33 ms | pending |
+| ~2,000 | 66 ms | 68 ms | pending |
+
+**Measured on a desktop JVM (Intel Xeon @ 2.60 GHz, OpenJDK 17), not a phone.** A phone will be slower.
+The test screenshots are generated: realistic text lengths (10 to 400 words) and random 384-number vectors,
+which cost the same to compare as real ones. Turning the query into a vector with the real model takes
+about 2 ms of that. Not included: loading the rows from the database (only on the first search after
+something changes) and drawing the results.
+
+Run it yourself with `./gradlew :core:benchmark` (code in
+[`SearchBenchmark.kt`](core/src/test/kotlin/io/github/mrans2006/yaad/core/SearchBenchmark.kt)).
+Real-phone numbers are still missing: if you time search on your phone, please open an issue with
+the phone model and your numbers.
+
+## Known limitations
+
+- **English only.** Text is read with ML Kit's Latin-script recognizer, and the search model is English.
+  Urdu or Sindhi script isn't read properly: such a screenshot comes back with no text or a few stray
+  Latin characters. With no text it's saved as "No text found", stays in your library, and can never come
+  up in a search. Yaad doesn't warn you when this happens. Searching *in* Urdu doesn't work either: the
+  model only sees single Urdu letters. (Roman Urdu written in English letters is read, and exact-word
+  search works for it.)
+- **Tested on one real phone so far** (the maintainer's Oppo Reno 6). Everything else is automated
+  tests and screens rendered on a computer. Other phones may behave differently; reports are welcome.
+- **Battery guide buttons** open each brand's known settings page, but these move between OS versions,
+  so a button may land on a general settings page. The written steps still apply.
+- **arm64 only.** The APK has no 32-bit or x86 build, so older 32-bit-only phones can't install it.
+- **ML Kit is closed source.** It runs offline, but it means Yaad can't be on F-Droid yet.
+- **No backup or export yet.** Android backup is turned off for Yaad, so a new phone or a reinstall
+  starts a fresh library. Your screenshots stay in the gallery and can be imported again, but images
+  shared into Yaad are lost.
+
+## Build it yourself
+
+You need JDK 17 and the Android SDK (Android Studio includes both).
+
+```bash
+git clone https://github.com/mr-ans-2006/yaad.git
+cd yaad
+./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
+./gradlew :core:test             # tokenizer, search model, ranking, tags, key line
+./gradlew :app:testDebugUnitTest # auto-pick logic against a pretend gallery
+./gradlew :app:recordRoborazziDebug   # re-draw the screenshots in docs/screenshots
+./gradlew :core:benchmark        # search speed at 500 / 1,000 / 2,000 screenshots
+```
+
+A signed release build needs your own signing key. See [docs/MAINTAINING.md](docs/MAINTAINING.md).
 
 ## Project layout
 

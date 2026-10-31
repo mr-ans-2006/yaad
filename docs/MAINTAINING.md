@@ -16,6 +16,7 @@ How to change things, test them, and ship a new version.
 | `./gradlew assembleDebug` | Builds a test APK: `app/build/outputs/apk/debug/app-debug.apk` |
 | `./gradlew installDebug` | Builds and installs it on a phone plugged in by USB (with USB debugging on) |
 | `./gradlew :core:test` | Tests the brain: tokenizer, model, search, tags, key line |
+| `./gradlew :core:benchmark` | Times search at 500 / 1,000 / 2,000 fake screenshots (not part of `:core:test`) |
 | `./gradlew :app:testDebugUnitTest` | Tests auto-pick and draws the screens |
 | `./gradlew :app:recordRoborazziDebug` | Re-draws `docs/screenshots/` after you change the design |
 | `./gradlew assembleRelease` | Builds the signed release APK (needs your signing key, see below) |
