@@ -56,6 +56,49 @@ I'm a CS student in Karachi, and Yaad is my attempt at fixing this for myself.
   takes you to the real file.
 - **Light and dark mode**, in a neo-brutalist look: thick outlines, hard shadows, flat bright colours.
 
+## Architecture
+
+```
+  Screenshots
+  new one in the gallery (MediaStore observer, WorkManager      Share to Yaad / Add
+  content trigger, hourly job, catch-up when the app opens)            │
+                     │                                                 │
+                     └──────────────► Room DB: new row, PENDING ◄──────┘
+                                              │
+                                              ▼
+                        ML Kit OCR (Latin script, bundled, offline)
+                        → lines of text + how tall each line is
+                                              │
+                                              ▼
+            core/  key line · links · embeddings · auto-tags
+                   embeddings = all-MiniLM-L6-v2 (int8 ONNX), 384 numbers
+                   per chunk of up to 120 words, at most 4 chunks
+                                              │
+                                              ▼
+                        Room DB: text, key line, tags, links, vectors
+                        (all rows are kept in memory for searching)
+                                              │
+  your search ──► MiniLM embedding ───────────┐
+                                              ▼
+            core/  Hybrid search: meaning score + exact-word bonus
+                   → best 100 results
+```
+
+**Why hybrid search.** Meaning search alone is bad at exact names. A small English model doesn't
+really know what "llama.cpp" or "kolachi" is, so a screenshot that literally says it can lose to one
+that is only vaguely similar. So each screenshot's score adds two things (see
+[`SearchRanker.kt`](core/src/main/kotlin/io/github/mrans2006/yaad/core/SearchRanker.kt)):
+
+- **Meaning:** cosine similarity between your search and the screenshot (its best-matching chunk), up to 1.
+- **Exact words:** + 0.35 × the share of your search words found in the text (common words like
+  "the" or "find" are skipped; "llama.cpp", "c++" and "c#" stay whole), + 0.15 if your whole search
+  appears as written, + 0.10 if a word is one of the screenshot's tags.
+
+A screenshot with a meaning score under 0.27 is only shown if at least one word or tag matches.
+
+**Why `core/` and `app/`.** `core/` is plain Kotlin with no Android dependency, so the search, tagging and
+key-line logic is unit-tested on a normal computer's JVM in seconds, without a phone or emulator.
+
 ## Privacy
 
 - **No internet permission.** Android itself blocks Yaad from going online. You can check this yourself:
@@ -133,49 +176,6 @@ for almost every phone. Yaad's guides are based on it.
    (that takes milliseconds) and adds a bonus for exact word matches. Best matches come first.
 
 The full beginner tour of the code is in [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
-
-## Architecture
-
-```
-  Screenshots
-  new one in the gallery (MediaStore observer, WorkManager      Share to Yaad / Add
-  content trigger, hourly job, catch-up when the app opens)            │
-                     │                                                 │
-                     └──────────────► Room DB: new row, PENDING ◄──────┘
-                                              │
-                                              ▼
-                        ML Kit OCR (Latin script, bundled, offline)
-                        → lines of text + how tall each line is
-                                              │
-                                              ▼
-            core/  key line · links · embeddings · auto-tags
-                   embeddings = all-MiniLM-L6-v2 (int8 ONNX), 384 numbers
-                   per chunk of up to 120 words, at most 4 chunks
-                                              │
-                                              ▼
-                        Room DB: text, key line, tags, links, vectors
-                        (all rows are kept in memory for searching)
-                                              │
-  your search ──► MiniLM embedding ───────────┐
-                                              ▼
-            core/  Hybrid search: meaning score + exact-word bonus
-                   → best 100 results
-```
-
-**Why hybrid search.** Meaning search alone is bad at exact names. A small English model doesn't
-really know what "llama.cpp" or "kolachi" is, so a screenshot that literally says it can lose to one
-that is only vaguely similar. So each screenshot's score adds two things (see
-[`SearchRanker.kt`](core/src/main/kotlin/io/github/mrans2006/yaad/core/SearchRanker.kt)):
-
-- **Meaning:** cosine similarity between your search and the screenshot (its best-matching chunk), up to 1.
-- **Exact words:** + 0.35 × the share of your search words found in the text (common words like
-  "the" or "find" are skipped; "llama.cpp", "c++" and "c#" stay whole), + 0.15 if your whole search
-  appears as written, + 0.10 if a word is one of the screenshot's tags.
-
-A screenshot with a meaning score under 0.27 is only shown if at least one word or tag matches.
-
-**Why `core/` and `app/`.** `core/` is plain Kotlin with no Android dependency, so the search, tagging and
-key-line logic is unit-tested on a normal computer's JVM in seconds, without a phone or emulator.
 
 ## Benchmarks
 
