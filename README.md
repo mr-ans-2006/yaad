@@ -175,11 +175,11 @@ key-line logic is unit-tested on a normal computer's JVM in seconds, without a p
 
 Search time for one query (*"how to run llama.cpp on android"*), median of 20 runs after 10 warm-ups:
 
-| Screenshots | Search (ranking) | Query embedding + search | Real device (Oppo Reno 6) |
-|---:|---:|---:|:---:|
-| ~500 | 17 ms | 20 ms | pending |
-| ~1,000 | 30 ms | 33 ms | pending |
-| ~2,000 | 66 ms | 68 ms | pending |
+| Screenshots | Search (ranking) | Query embedding + search |
+|---:|---:|---:|
+| ~500 | 17 ms | 20 ms |
+| ~1,000 | 30 ms | 33 ms |
+| ~2,000 | 66 ms | 68 ms |
 
 **Measured on a desktop JVM (Intel Xeon @ 2.60 GHz, OpenJDK 17), not a phone.** A phone will be slower.
 The test screenshots are generated: realistic text lengths (10 to 400 words) and random 384-number vectors,
@@ -189,8 +189,6 @@ something changes) and drawing the results.
 
 Run it yourself with `./gradlew :core:benchmark` (code in
 [`SearchBenchmark.kt`](core/src/test/kotlin/io/github/mrans2006/yaad/core/SearchBenchmark.kt)).
-Real-phone numbers are still missing: if you time search on your phone, please open an issue with
-the phone model and your numbers.
 
 ## Known limitations
 
