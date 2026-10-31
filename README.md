@@ -33,12 +33,9 @@ using sample screenshots as the gallery content.</sub>
 
 ## Why I built this
 
-I take screenshots of everything: notes, links I want to read later, receipts, code snippets, bits of chats.
-They pile up fast, and whenever I needed one I couldn't find it. The gallery's
-search doesn't read the text inside a screenshot, and the tools that do mostly upload your screenshots to
-the cloud, which I didn't want for private things like chats and receipts. I'm a CS student in Karachi,
-and Yaad is my attempt at fixing this for myself: read the text on the phone, and let me search for a
-screenshot by what I remember about it.
+I take screenshots of everything — notes, links, receipts, code, bits of chats. They pile up, I can never find the one I need, and the gallery can't read them. The tools that can mostly upload them to a server. For receipts and chats, I didn't want that. So I built Yaad: read the text on the phone, search by what I remember about it.
+
+I'm a CS student in Karachi, and Yaad is my attempt at fixing this for myself.
 
 ## What it does
 
