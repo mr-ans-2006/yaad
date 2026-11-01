@@ -8,16 +8,17 @@ Yaad ships with these pieces made by others:
 
 | What | Used for | License |
 |---|---|---|
-| **Pixelify Sans** font (`app/src/main/res/font/pixelify_sans_bold.ttf`) | Logo and big headings | SIL Open Font License 1.1, see `licenses/PixelifySans-OFL.txt` |
-| **Space Grotesk** font (`app/src/main/res/font/space_grotesk_*.ttf`) | All body text | SIL Open Font License 1.1, see `licenses/SpaceGrotesk-OFL.txt` |
+| **Inter** font, v4.0 (`app/src/main/res/font/inter_*.ttf`) by Rasmus Andersson / The Inter Project Authors | All text | SIL Open Font License 1.1, see `licenses/Inter-OFL.txt` |
+| **Noto Sans Arabic** SemiBold (`app/src/main/res/font/noto_sans_arabic_semibold.ttf`) by The Noto Project Authors | Only the small یاد wordmark (Inter has no Arabic letters) | SIL Open Font License 1.1, see `licenses/NotoSansArabic-OFL.txt` |
 | **all-MiniLM-L6-v2** search model, int8 ONNX build (`app/src/main/assets/model/`) | Search by meaning | Apache License 2.0 (sentence-transformers / Microsoft) |
 | **ONNX Runtime** | Runs the search model | MIT |
 | **Google ML Kit Text Recognition** (bundled model) | Reading text in screenshots | Free to use under Google's ML Kit terms. **Not open source.** It runs fully on the phone. |
 | Jetpack Compose, Room, WorkManager, Navigation, AndroidX | The app itself | Apache License 2.0 |
 | Coil | Loading thumbnails | Apache License 2.0 |
 
-The fonts were converted from Google Fonts' variable files into fixed weights (Bold for Pixelify Sans;
-Regular, Medium and Bold for Space Grotesk). Under the OFL they keep their names and license.
+The fonts were cut down to keep the app small: Inter's variable font was turned into five fixed weights
+(Regular, Medium, SemiBold, Bold, ExtraBold) and trimmed to Latin letters, punctuation and common symbols;
+Noto Sans Arabic SemiBold was trimmed to the three letters of یاد. Under the OFL they keep their names and license.
 
 Honest note: ML Kit is a closed-source Google library. It is bundled inside the app, works offline,
 and Yaad removes the internet permission that ML Kit's analytics helper asks for, so it cannot send

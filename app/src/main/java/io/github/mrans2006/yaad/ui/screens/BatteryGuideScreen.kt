@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import io.github.mrans2006.yaad.ui.components.pressable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,12 +57,12 @@ data class BatteryActions(
 
 /** Each phone family gets its own accent colour, so the guides are easy to tell apart. */
 fun PhoneBrand.accent(): Color = when (this) {
-    PhoneBrand.SAMSUNG -> Palette.Blue
-    PhoneBrand.XIAOMI -> Palette.Orange
-    PhoneBrand.VIVO -> Palette.Teal
-    PhoneBrand.TRANSSION -> Palette.Pink
-    PhoneBrand.OPPO -> Palette.Green
-    PhoneBrand.GENERIC -> Palette.Purple
+    PhoneBrand.SAMSUNG -> Palette.TagStudy
+    PhoneBrand.XIAOMI -> Palette.TagShopping
+    PhoneBrand.VIVO -> Palette.TagQuotes
+    PhoneBrand.TRANSSION -> Palette.TagHacks
+    PhoneBrand.OPPO -> Palette.TagPlaces
+    PhoneBrand.GENERIC -> Palette.TagCode
 }
 
 /**
@@ -85,12 +86,12 @@ fun BatteryGuideScreen(
 
     Column(
         Modifier.fillMaxSize().background(Yaad.colors.background).statusBarsPadding().navigationBarsPadding()
-            .verticalScroll(rememberScrollState()).padding(16.dp),
+            .verticalScroll(rememberScrollState()).padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.height(56.dp), verticalAlignment = Alignment.CenterVertically) {
             BrutalIconButton(Icons.AutoMirrored.Rounded.ArrowBack, "Back", actions.onBack)
             Spacer(Modifier.width(14.dp))
-            Text("STAY AWAKE", style = YaadType.heading, color = Yaad.colors.text)
+            Text("Stay awake", style = YaadType.heading, color = Yaad.colors.text)
         }
         Spacer(Modifier.height(18.dp))
 
@@ -109,7 +110,7 @@ fun BatteryGuideScreen(
 
         // ---- Other phones ----
         Spacer(Modifier.height(6.dp))
-        Text("OTHER PHONES", style = YaadType.heading, color = Yaad.colors.text)
+        Text("Other phones", style = YaadType.heading, color = Yaad.colors.text)
         Spacer(Modifier.height(4.dp))
         Text("Not your phone, or helping a friend? Tap a brand to see its steps.",
             style = YaadType.body, color = Yaad.colors.subtext)
@@ -124,14 +125,14 @@ fun BatteryGuideScreen(
         }
 
         // ---- More help ----
-        BrutalBox(Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp), fill = Yaad.colors.card) {
+        BrutalBox(Modifier.fillMaxWidth(), fill = Yaad.colors.card) {
             Column(Modifier.padding(14.dp)) {
-                Text("Still stopping?", style = YaadType.title, color = Yaad.colors.text)
+                Text("Still stopping?", style = YaadType.cardTitle, color = Yaad.colors.text)
                 Spacer(Modifier.height(4.dp))
                 Text("dontkillmyapp.com has detailed, up-to-date steps for almost every phone. It opens in your browser; Yaad itself never goes online.",
                     style = YaadType.body, color = Yaad.colors.subtext)
                 Spacer(Modifier.height(12.dp))
-                BrutalButton("Open dontkillmyapp.com", actions.onMoreHelp, modifier = Modifier.padding(end = 4.dp, bottom = 4.dp))
+                BrutalButton("Open dontkillmyapp.com", actions.onMoreHelp, compact = true)
             }
         }
         Spacer(Modifier.height(8.dp))
@@ -144,14 +145,14 @@ private fun StatusBox(batteryOk: Boolean, brand: PhoneBrand) {
     // have extra switches of their own that apps can't read, so we say so honestly.
     val okText = if (brand == PhoneBrand.GENERIC) "Battery saver is off for Yaad. Auto-pick can run in the background."
     else "Android's battery saver is off for Yaad. ${brand.label.substringBefore(" ·")} has its own extra switches too, so check the steps below."
-    BrutalBox(Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp), fill = if (batteryOk) Palette.Green else Palette.Pink) {
+    BrutalBox(Modifier.fillMaxWidth(), fill = if (batteryOk) Palette.TagPlaces else Palette.TagChats) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(if (batteryOk) Icons.Rounded.CheckCircle else Icons.Rounded.WarningAmber, null, tint = Palette.Ink, modifier = Modifier.size(28.dp))
             Spacer(Modifier.width(12.dp))
             Text(
                 if (batteryOk) okText
                 else "Battery saver is still on for Yaad. New screenshots may wait until you open the app.",
-                style = YaadType.bodyBold, color = Palette.Ink,
+                style = YaadType.key, color = Palette.Ink,
             )
         }
     }
@@ -160,7 +161,7 @@ private fun StatusBox(batteryOk: Boolean, brand: PhoneBrand) {
 /** The coloured "Samsung · One UI" label at the top of a guide. */
 @Composable
 private fun BrandHeader(guide: BatteryGuide, label: String) {
-    BrutalBox(Modifier.padding(end = 4.dp, bottom = 4.dp), fill = guide.brand.accent(), radius = 10.dp) {
+    BrutalBox(fill = guide.brand.accent(), radius = 10.dp, border = 1.dp) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Rounded.PhoneAndroid, null, tint = Palette.Ink, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(8.dp))
@@ -177,12 +178,12 @@ private fun BrandHeader(guide: BatteryGuide, label: String) {
 private fun OtherPhone(guide: BatteryGuide, isOpen: Boolean, onToggle: () -> Unit, onButton: (GuideButton) -> Unit) {
     Column(Modifier.fillMaxWidth().padding(bottom = 14.dp)) {
         BrutalBox(
-            Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp).clickable(onClick = onToggle),
+            Modifier.fillMaxWidth().pressable(onClick = onToggle),
             fill = if (isOpen) guide.brand.accent() else Yaad.colors.card,
         ) {
             Row(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    Text(guide.brand.label, style = YaadType.title, color = if (isOpen) Palette.Ink else Yaad.colors.text)
+                    Text(guide.brand.label, style = YaadType.cardTitle, color = if (isOpen) Palette.Ink else Yaad.colors.text)
                     Text(guide.brand.system, style = YaadType.small, color = if (isOpen) Palette.Ink else Yaad.colors.subtext)
                 }
                 Icon(
@@ -203,23 +204,22 @@ private fun OtherPhone(guide: BatteryGuide, isOpen: Boolean, onToggle: () -> Uni
 
 @Composable
 private fun Step(n: Int, step: GuideStep, accent: Color, onButton: (GuideButton) -> Unit) {
-    BrutalBox(Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 18.dp)) {
+    BrutalBox(Modifier.fillMaxWidth().padding(bottom = 14.dp)) {
         Row(Modifier.padding(14.dp)) {
-            BrutalBox(fill = accent, shadow = 0.dp, radius = 8.dp) {
-                Text("$n", style = YaadType.heading, color = Palette.Ink, textAlign = TextAlign.Center,
-                    modifier = Modifier.width(38.dp).padding(vertical = 2.dp))
+            BrutalBox(fill = accent, radius = 10.dp, border = 1.dp) {
+                Text("$n", style = YaadType.title, color = Palette.Ink, textAlign = TextAlign.Center,
+                    modifier = Modifier.width(34.dp).padding(vertical = 5.dp))
             }
             Spacer(Modifier.width(14.dp))
             Column {
-                Text(step.title, style = YaadType.title, color = Yaad.colors.text)
+                Text(step.title, style = YaadType.cardTitle, color = Yaad.colors.text)
                 Spacer(Modifier.height(4.dp))
                 Text(step.body, style = YaadType.body, color = Yaad.colors.subtext)
                 step.buttons.forEachIndexed { i, button ->
                     Spacer(Modifier.height(if (i == 0) 12.dp else 10.dp))
                     BrutalButton(
                         button.label, { onButton(button) },
-                        fill = if (i == 0) Palette.Yellow else Yaad.colors.card,
-                        modifier = Modifier.padding(end = 4.dp, bottom = 4.dp),
+                        primary = i == 0, compact = true,
                     )
                 }
             }

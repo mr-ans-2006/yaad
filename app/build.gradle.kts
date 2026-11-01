@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.mrans2006.yaad"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
         // The Oppo Reno 6 (and almost every phone from the last 6 years) is arm64.
         ndk { abiFilters += listOf("arm64-v8a") }
     }
@@ -60,8 +60,18 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-            all { it.systemProperty("robolectric.graphicsMode", "NATIVE") }
+            all {
+                it.systemProperty("robolectric.graphicsMode", "NATIVE")
+                // Opt-in frame recorder (MotionRecordingTest): ./gradlew ... -Pyaad.motion=true
+                it.systemProperty("yaad.motion", (project.findProperty("yaad.motion") ?: "false").toString())
+            }
         }
+    }
+
+    lint {
+        // lifecycle 2.9's lint check crashes inside AGP 8.7's lint ("KaCallableMemberCall ... interface was expected").
+        // Yaad uses no LiveData, so this check has nothing to look at anyway.
+        disable += "NullSafeMutableLiveData"
     }
 
     packaging {
@@ -75,7 +85,7 @@ dependencies {
     implementation(project(":core"))
 
     // Jetpack Compose: the toolkit we draw the whole UI with
-    val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
+    val composeBom = platform("androidx.compose:compose-bom:2026.02.00")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
@@ -83,10 +93,10 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.activity:activity-compose:1.9.2")
-    implementation("androidx.navigation:navigation-compose:2.8.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
     implementation("androidx.core:core-ktx:1.13.1")
 
     // Room: the on-phone database

@@ -29,6 +29,20 @@ class Prefs(context: Context) {
     val batteryTipDismissed: StateFlow<Boolean> = _batteryTipDismissed
     fun dismissBatteryTip() { sp.edit().putBoolean("batteryTipDismissed", true).apply(); _batteryTipDismissed.value = true }
 
+    /** The last few searches (newest first), shown as one-tap chips on the empty Search tab. Stays on the phone. */
+    private val _recentQueries = MutableStateFlow(
+        sp.getString("recentQueries", "").orEmpty().split('\n').filter { it.isNotBlank() },
+    )
+    val recentQueries: StateFlow<List<String>> = _recentQueries
+    fun addRecentQuery(query: String) {
+        val q = query.trim().replace('\n', ' ')
+        if (q.length < 2) return
+        val list = (listOf(q) + _recentQueries.value.filterNot { it.equals(q, ignoreCase = true) }).take(5)
+        sp.edit().putString("recentQueries", list.joinToString("\n")).apply()
+        _recentQueries.value = list
+    }
+    fun clearRecentQueries() { sp.edit().remove("recentQueries").apply(); _recentQueries.value = emptyList() }
+
     var lastScanAt: Long
         get() = sp.getLong("lastScanAt", 0)
         set(v) = sp.edit().putLong("lastScanAt", v).apply()

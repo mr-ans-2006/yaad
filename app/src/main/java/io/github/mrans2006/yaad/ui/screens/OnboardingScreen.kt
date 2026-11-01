@@ -54,13 +54,15 @@ fun OnboardingScreen(step: OnboardingStep, actions: OnboardingActions) {
         Modifier.fillMaxSize().background(Yaad.colors.background).statusBarsPadding().navigationBarsPadding()
             .verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 16.dp),
     ) {
-        BrutalBox(fill = Palette.Yellow, shadow = 5.dp) {
-            Text("YAAD", style = YaadType.hero.copy(fontSize = 54.sp, lineHeight = 58.sp), color = Palette.Ink,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+        Spacer(Modifier.height(12.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Yaad", style = YaadType.logo.copy(fontSize = 44.sp), color = Yaad.colors.text)
+            Spacer(Modifier.width(12.dp))
+            Text("یاد", style = YaadType.urdu.copy(fontSize = 30.sp), color = Yaad.colors.subtext)
         }
-        Spacer(Modifier.height(8.dp))
-        Text("یاد · memory", style = YaadType.body, color = Yaad.colors.subtext)
-        Spacer(Modifier.height(22.dp))
+        Spacer(Modifier.height(2.dp))
+        Text("means \u201Cmemory\u201D in Urdu", style = YaadType.small, color = Yaad.colors.subtext)
+        Spacer(Modifier.height(26.dp))
 
         when (step) {
             OnboardingStep.Welcome -> Welcome(actions.onStart)
@@ -74,12 +76,12 @@ fun OnboardingScreen(step: OnboardingStep, actions: OnboardingActions) {
 private fun Welcome(onStart: () -> Unit) {
     Text("Never lose a screenshot again.", style = YaadType.heading, color = Yaad.colors.text)
     Spacer(Modifier.height(20.dp))
-    Feature(Icons.Rounded.Screenshot, Palette.Yellow, "Auto-pick", "Every new screenshot is saved on its own. You can also share any image to Yaad.")
-    Feature(Icons.Rounded.TextFields, Palette.Pink, "Reads the text", "Pulls out the key line and tags it: Code, Tools, Places, Study, Hacks…")
-    Feature(Icons.Rounded.AutoAwesome, Palette.Purple, "Search by meaning", "Type \u201Ca tool for data recovery\u201D and find the one that said \u201Crestore deleted files\u201D.")
-    Feature(Icons.Rounded.Lock, Palette.Green, "Stays on your phone", "No account. No server. Yaad doesn't even have internet permission. Open source, so anyone can check.")
+    Feature(Icons.Rounded.Screenshot, Palette.TagTools, "Auto-pick", "Every new screenshot is saved on its own. You can also share any image to Yaad.")
+    Feature(Icons.Rounded.TextFields, Palette.TagHacks, "Reads the text", "Pulls out the key line and tags it: Code, Tools, Places, Study, Hacks…")
+    Feature(Icons.Rounded.AutoAwesome, Palette.TagCode, "Search by meaning", "Type \u201Ca tool for data recovery\u201D and find the one that said \u201Crestore deleted files\u201D.")
+    Feature(Icons.Rounded.Lock, Palette.TagPlaces, "Stays on your phone", "No account. No server. Yaad doesn't even have internet permission. Open source, so anyone can check.")
     Spacer(Modifier.height(10.dp))
-    BrutalButton("Let's go", onStart, fill = Palette.Yellow, modifier = Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp))
+    BrutalButton("Let's go", onStart, primary = true, modifier = Modifier.fillMaxWidth().padding(end = 3.dp, bottom = 3.dp))
     Spacer(Modifier.height(10.dp))
     Text("Next, Android will ask to let Yaad see your photos. Yaad only looks inside Screenshots folders.",
         style = YaadType.small, color = Yaad.colors.subtext)
@@ -87,14 +89,14 @@ private fun Welcome(onStart: () -> Unit) {
 
 @Composable
 private fun Feature(icon: ImageVector, color: Color, title: String, body: String) {
-    BrutalBox(Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 16.dp)) {
+    BrutalBox(Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
-            BrutalBox(fill = color, shadow = 0.dp, radius = 8.dp) {
+            BrutalBox(fill = color, radius = 10.dp, border = 1.dp) {
                 Icon(icon, null, tint = Palette.Ink, modifier = Modifier.padding(8.dp).size(22.dp))
             }
             Spacer(Modifier.width(14.dp))
             Column {
-                Text(title, style = YaadType.title, color = Yaad.colors.text)
+                Text(title, style = YaadType.cardTitle, color = Yaad.colors.text)
                 Spacer(Modifier.height(2.dp))
                 Text(body, style = YaadType.body, color = Yaad.colors.subtext)
             }
@@ -117,11 +119,11 @@ private fun ImportChoice(found: Int?, actions: OnboardingActions) {
     Spacer(Modifier.height(24.dp))
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         if (found != 0) {
-            BrutalButton(if (found == null) "Import all" else "Import all $found", actions.onImportAll, fill = Palette.Yellow,
-                modifier = Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp), enabled = found != null)
+            BrutalButton(if (found == null) "Import all" else "Import all $found", actions.onImportAll, primary = true,
+                modifier = Modifier.fillMaxWidth().padding(end = 3.dp, bottom = 3.dp), enabled = found != null)
         }
         BrutalButton(if (found == 0) "Continue" else "Only new ones from now", actions.onOnlyNew,
-            modifier = Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp))
+            primary = found == 0, modifier = Modifier.fillMaxWidth().padding(end = 3.dp, bottom = 3.dp))
     }
 }
 
@@ -132,5 +134,5 @@ private fun NoPermission(onContinue: () -> Unit) {
     Text("Without photo access Yaad can't pick screenshots up on its own, but sharing an image to Yaad still works. You can allow access later from the home screen.",
         style = YaadType.body, color = Yaad.colors.subtext)
     Spacer(Modifier.height(24.dp))
-    BrutalButton("Continue", onContinue, fill = Palette.Yellow, modifier = Modifier.fillMaxWidth().padding(end = 4.dp, bottom = 4.dp))
+    BrutalButton("Continue", onContinue, primary = true, modifier = Modifier.fillMaxWidth().padding(end = 3.dp, bottom = 3.dp))
 }

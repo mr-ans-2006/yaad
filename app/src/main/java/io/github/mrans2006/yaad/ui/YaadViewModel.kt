@@ -40,6 +40,8 @@ data class HomeState(
     /** This phone's family (Samsung, Xiaomi, …), so the battery tip can name it. */
     val phoneBrand: PhoneBrand = PhoneBrand.GENERIC,
     val loaded: Boolean = false,
+    /** Recent searches, newest first (Search tab, before you type). */
+    val recent: List<String> = emptyList(),
 ) {
     /** What the grid should show right now: search results or all screenshots, filtered by tag. */
     val visible: List<Shot>
@@ -72,11 +74,12 @@ class YaadViewModel(app: Application) : AndroidViewModel(app) {
         }
 
     private val search = combine(query, searchResults, searching, selectedTag) { q, r, s, t -> SearchBits(q, r, s, t) }
+    private data class Flags(val permission: Boolean, val batteryOk: Boolean, val tipDismissed: Boolean, val recent: List<String>)
     private data class SearchBits(val q: String, val ids: List<Long>?, val searching: Boolean, val tag: String?)
 
     val state: StateFlow<HomeState> = combine(
         library.observeAll(), search, library.observePendingCount(), progress,
-        combine(permission, batteryOk, prefs.batteryTipDismissed) { p, b, d -> Triple(p, b, d) },
+        combine(permission, batteryOk, prefs.batteryTipDismissed, prefs.recentQueries) { p, b, d, r -> Flags(p, b, d, r) },
     ) { shots, s, pending, prog, flags ->
         val byId = shots.associateBy { it.id }
         HomeState(
@@ -88,8 +91,9 @@ class YaadViewModel(app: Application) : AndroidViewModel(app) {
             pending = pending,
             progressDone = prog.first,
             progressTotal = prog.second,
-            hasPermission = flags.first,
-            showBatteryTip = !flags.second && !flags.third,
+            hasPermission = flags.permission,
+            showBatteryTip = !flags.batteryOk && !flags.tipDismissed,
+            recent = flags.recent,
             phoneBrand = ThisPhone.brand,
             loaded = true,
         )
@@ -146,6 +150,10 @@ class YaadViewModel(app: Application) : AndroidViewModel(app) {
         prefs.setOnboarded()
         AutoPick.scanNow(getApplication())
     }
+
+    /** Remember a search once it was useful (you opened a result or pressed Search). */
+    fun rememberQuery(q: String) = prefs.addRecentQuery(q)
+    fun clearRecent() = prefs.clearRecentQueries()
 
     fun setTheme(mode: ThemeMode) = prefs.setTheme(mode)
     fun dismissBatteryTip() = prefs.dismissBatteryTip()

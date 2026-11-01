@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="paper">#FFFFF6E5</color>
-    <color name="night">#FF151515</color>
+    <color name="paper">#FFFBF7EE</color>
+    <color name="night">#FF171512</color>
     <color name="yellow">#FFFFD23F</color>
-    <color name="ink">#FF111111</color>
+    <color name="ink">#FF1C1B19</color>
 </resources>

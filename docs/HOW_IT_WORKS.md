@@ -234,25 +234,43 @@ Searching waits 250 ms after you stop typing (`debounce`) so it doesn't run on e
 
 ### `ui/theme/`: the look
 - **`Color.kt`**: the palette and one colour per tag. `YaadColors` has a light and a dark version.
-- **`Type.kt`**: the two fonts. `PixelFont` (Pixelify Sans) only for the logo and big headings;
-  `BodyFont` (Space Grotesk) for everything you read.
+- **`Type.kt`**: the fonts. `Inter` for everything; `UrduFont` (Noto Sans Arabic, only the letters of یاد)
+  for the small Urdu wordmark, because Inter has no Arabic letters.
 - **`Theme.kt`**: `YaadTheme { ... }` picks light or dark and hands the colours to every screen.
 
-### `ui/components/Brutal.kt`: the neo-brutalist pieces
-The whole style is one `Modifier.brutal(...)`: draw a solid shadow shifted down-right, then the fill,
-then a thick outline. `BrutalButton` slides into its shadow when pressed. `FolderCard` adds the
-coloured tab on top, like a file folder.
+### `ui/components/Soft.kt`: the soft-brutalist pieces (v1.1)
+Four rules: a thin 1.5 dp outline on everything (`Modifier.outlined(...)`), ONE hard shadow only on
+primary things (the search box, primary buttons, the key-line card), colour only on tags (muted
+pastels), and black primary buttons (bone-white in dark mode). `Modifier.pressable` makes cards and
+buttons shrink a touch while pressed. `TagChip` fades between colours when you select it.
+`BottomBar.kt` is the two-tab bar (Search, Folders).
+
+### `ui/YaadNavHost.kt` and `ui/Motion.kt`: screens and animations
+`YaadNavHost` is the map of screens: the Search tab (`search` → `shot/{id}`), the Folders tab
+(`folders` → `folder/{key}` → `shot/{id}`), plus `settings` and `battery`. Each tab keeps its own back
+stack and scroll position. Everything sits inside a `SharedTransitionLayout`: a grid thumbnail and the
+detail image share the name `shot-<id>@<list>` (`Modifier.sharedShot`), so opening a screenshot makes
+the thumbnail grow into the detail image, and Back shrinks it home. Other screen changes are a gentle
+fade plus a slight slide (`enterFor` / `exitFor`). With Android's "Remove animations" setting on
+(`LocalReduceMotion`), screens just swap.
+
+### `ui/Folders.kt`: how folders are made
+Folders are not stored: they are worked out from the auto-tags every time the list changes. "All" holds
+everything; then one folder per tag that has screenshots (in the order of `Tags.kt`); then "Untagged"
+(text read, no tag fitted) and "No text" (nothing readable, or reading failed). A screenshot with two
+tags is in both folders. Screenshots still being read are in "All" only until their tags arrive.
 
 ### `ui/screens/`
-`HomeScreen`, `DetailScreen`, `OnboardingScreen`, `SettingsScreen`, `BatteryGuideScreen`.
+`SearchScreen`, `FoldersScreen` (+ `FolderScreen`), `DetailScreen`, `OnboardingScreen`, `SettingsScreen`,
+`BatteryGuideScreen`, and `Common.kt` (top bar, search box, `ShotCard`, battery tip, import status).
 
 `BatteryGuideScreen(batteryOk, myBrand, actions)` draws: a green/pink status box, then **YOUR PHONE**
 with that brand's steps, then **OTHER PHONES**: one bar per other brand. Tapping a bar opens its steps
 (`rememberSaveable` remembers which one is open, even if you rotate the phone). Each brand has its own
 accent colour (`PhoneBrand.accent()`). The screen never opens Settings itself: a button calls
 `actions.onButton(button)` and MainActivity does the opening. That keeps the screen easy to preview
-and screenshot. The home screen's battery tip (`BatteryTip` in `HomeScreen.kt`) uses
-`HomeState.phoneBrand` to say "Samsung phones put apps to sleep…" (or "Many phones…" when unknown).
+and screenshot. The Search tab's one-line battery tip (`BatteryTip` in `Common.kt`) uses
+`HomeState.phoneBrand` to say "Keep Yaad working on Samsung" (or "your phone" when unknown).
 Each one takes a *state* (what to show) and *actions* (what happens on tap). That makes them easy to
 preview and test, and is why the screenshot tests can draw them with sample data.
 
@@ -284,16 +302,18 @@ preview and test, and is why the screenshot tests can draw them with sample data
 | `core/.../BatteryGuideTest` | Maker names (`"samsung"`, `"TECNO MOBILE LIMITED"`, `"POCO"`, `"Google"`…) pick the right guide; every guide has steps; every button ends with screens that always exist |
 | `core/.../SpeedTest` | Prints how fast embedding and ranking are |
 | `app/.../AutoPickTest` | Auto-pick against a pretend Android 13 gallery: which folders, new/deleted/ignored, permissions, jobs |
-| `app/.../ScreenshotsTest` | Draws every screen to `docs/screenshots/` |
+| `app/.../ScreenshotsTest` | Draws every screen, light and dark, to `app/build/screenshots-v1.1/` |
+| `app/.../FoldersTest` | How screenshots are sorted into folders |
+| `app/.../MotionRecordingTest` | Opt-in: saves 60 fps frames of open/back and tab switching (`-Pyaad.motion=true`) |
 
 ---
 
 ## 7. Things to try (to learn by changing)
 
-1. **Change a colour.** In `ui/theme/Color.kt`, change `Pink`. Run the app or `./gradlew :app:recordRoborazziDebug`.
+1. **Change a colour.** In `ui/theme/Color.kt`, change `TagHacks`. Run the app or `./gradlew :app:recordRoborazziDebug`.
 2. **Add a tag**, like "Recipes": add it to `Tags.kt` with keywords and 3 example sentences, give it a
    colour in `tagColor()`, and add a test sample in `core/src/test/.../Samples.kt`.
 3. **Make the word match stronger.** In `SearchRanker.kt`, change `0.35f` to `0.5f` and run `./gradlew :core:test`.
 4. **Reword a battery step.** Edit the text in `core/.../BatteryGuides.kt`, then run
-   `./gradlew :app:recordRoborazziDebug` and look at `docs/screenshots/13_battery_samsung.png`.
-5. **Show more of the key line.** In `HomeScreen.kt` → `ShotCard`, change `maxLines = 4`.
+   `./gradlew :app:recordRoborazziDebug` and look at `app/build/screenshots-v1.1/12_battery_guide_light.png`.
+5. **Show more of the key line.** In `ui/screens/Common.kt` → `ShotCard`, change `maxLines`.

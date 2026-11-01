@@ -18,7 +18,7 @@ How to change things, test them, and ship a new version.
 | `./gradlew :core:test` | Tests the brain: tokenizer, model, search, tags, key line |
 | `./gradlew :core:benchmark` | Times search at 500 / 1,000 / 2,000 fake screenshots (not part of `:core:test`) |
 | `./gradlew :app:testDebugUnitTest` | Tests auto-pick and draws the screens |
-| `./gradlew :app:recordRoborazziDebug` | Re-draws `docs/screenshots/` after you change the design |
+| `./gradlew :app:recordRoborazziDebug` | Re-draws every screen to `app/build/screenshots-v1.1/` after you change the design |
 | `./gradlew assembleRelease` | Builds the signed release APK (needs your signing key, see below) |
 
 On Windows use `gradlew.bat` instead of `./gradlew`.
@@ -32,7 +32,8 @@ the test tells you exactly which search got worse.
 |---|---|
 | Change colours | `app/src/main/java/.../ui/theme/Color.kt` |
 | Change fonts or text sizes | `ui/theme/Type.kt` (font files are in `app/src/main/res/font/`) |
-| Change how cards/buttons look | `ui/components/Brutal.kt` |
+| Change how cards/buttons look | `ui/components/Soft.kt` |
+| Change the screen map or animations | `ui/YaadNavHost.kt`, `ui/Motion.kt` |
 | Change a screen's layout or words | `ui/screens/*.kt` |
 | Add or change a tag | `core/src/main/kotlin/.../Tags.kt` + a colour in `tagColor()` in `Color.kt` |
 | Change how the key line is chosen | `core/.../KeyLineFinder.kt` |

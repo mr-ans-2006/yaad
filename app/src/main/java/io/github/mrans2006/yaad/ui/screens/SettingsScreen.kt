@@ -27,7 +27,6 @@ import io.github.mrans2006.yaad.ui.components.BrutalBox
 import io.github.mrans2006.yaad.ui.components.BrutalButton
 import io.github.mrans2006.yaad.ui.components.BrutalIconButton
 import io.github.mrans2006.yaad.ui.components.TagChip
-import io.github.mrans2006.yaad.ui.theme.Palette
 import io.github.mrans2006.yaad.ui.theme.ThemeMode
 import io.github.mrans2006.yaad.ui.theme.Yaad
 import io.github.mrans2006.yaad.ui.theme.YaadType
@@ -58,14 +57,14 @@ fun SettingsScreen(state: SettingsState, actions: SettingsActions) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             BrutalIconButton(Icons.AutoMirrored.Rounded.ArrowBack, "Back", actions.onBack)
             Spacer(Modifier.width(14.dp))
-            Text("SETTINGS", style = YaadType.heading, color = Yaad.colors.text)
+            Text("Settings", style = YaadType.heading, color = Yaad.colors.text)
         }
         Spacer(Modifier.height(22.dp))
 
         Section("Look") {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 listOf(ThemeMode.SYSTEM to "Auto", ThemeMode.LIGHT to "Light", ThemeMode.DARK to "Dark").forEach { (mode, label) ->
-                    TagChip(label, Palette.Yellow, selected = state.theme == mode, onClick = { actions.onTheme(mode) })
+                    TagChip(label, Yaad.colors.card, selected = state.theme == mode, onClick = { actions.onTheme(mode) })
                 }
             }
         }
@@ -81,7 +80,7 @@ fun SettingsScreen(state: SettingsState, actions: SettingsActions) {
             )
             Spacer(Modifier.height(12.dp))
             BrutalButton("Battery guide", actions.onBatteryGuide, icon = Icons.Rounded.BatteryChargingFull,
-                fill = if (state.batteryOk) Palette.Green else Palette.Pink, modifier = Modifier.padding(end = 4.dp, bottom = 4.dp))
+                modifier = Modifier)
             Spacer(Modifier.height(10.dp))
             BrutalButton("Check for new screenshots", actions.onScanNow, icon = Icons.Rounded.Refresh,
                 modifier = Modifier.padding(end = 4.dp, bottom = 4.dp))
@@ -92,7 +91,7 @@ fun SettingsScreen(state: SettingsState, actions: SettingsActions) {
                 style = YaadType.body, color = Yaad.colors.text)
             if (state.failed > 0) {
                 Spacer(Modifier.height(12.dp))
-                BrutalButton("Try the failed ones again", actions.onRetryFailed, fill = Palette.Purple, modifier = Modifier.padding(end = 4.dp, bottom = 4.dp))
+                BrutalButton("Try the failed ones again", actions.onRetryFailed, primary = true, modifier = Modifier.padding(end = 3.dp, bottom = 3.dp))
             }
         }
 
@@ -106,7 +105,7 @@ fun SettingsScreen(state: SettingsState, actions: SettingsActions) {
             Text("Yaad ${state.version} by Ali Nawaz", style = YaadType.bodyBold, color = Yaad.colors.text)
             Spacer(Modifier.height(4.dp))
             Text("Open source (MIT). Text reading by Google ML Kit (on-device). Search model: all-MiniLM-L6-v2 (Apache 2.0). " +
-                "Fonts: Pixelify Sans and Space Grotesk (SIL Open Font License).", style = YaadType.small, color = Yaad.colors.subtext)
+                "Fonts: Inter and Noto Sans Arabic (SIL Open Font License).", style = YaadType.small, color = Yaad.colors.subtext)
         }
     }
 }

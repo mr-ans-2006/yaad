@@ -27,11 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import io.github.mrans2006.yaad.battery.SettingsDoors
 import io.github.mrans2006.yaad.battery.ThisPhone
 import io.github.mrans2006.yaad.core.BatteryGuides
@@ -40,12 +35,11 @@ import io.github.mrans2006.yaad.data.Shot
 import io.github.mrans2006.yaad.pickup.AutoPick
 import io.github.mrans2006.yaad.pickup.Permissions
 import io.github.mrans2006.yaad.ui.YaadViewModel
+import io.github.mrans2006.yaad.ui.YaadNavHost
 import io.github.mrans2006.yaad.ui.screens.BatteryActions
 import io.github.mrans2006.yaad.ui.screens.BatteryGuideScreen
 import io.github.mrans2006.yaad.ui.screens.DetailActions
-import io.github.mrans2006.yaad.ui.screens.DetailScreen
-import io.github.mrans2006.yaad.ui.screens.HomeActions
-import io.github.mrans2006.yaad.ui.screens.HomeScreen
+import io.github.mrans2006.yaad.ui.screens.SearchActions
 import io.github.mrans2006.yaad.ui.screens.OnboardingActions
 import io.github.mrans2006.yaad.ui.screens.OnboardingScreen
 import io.github.mrans2006.yaad.ui.screens.OnboardingStep
@@ -105,11 +99,10 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    // ---------------- The app's screens ----------------
+        // ---------------- The app's screens ----------------
 
     @Composable
     private fun YaadNavigation() {
-        val nav = rememberNavController()
         val state by vm.state.collectAsStateWithLifecycle()
         val pick = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(30)) { uris ->
             vm.importPicked(uris)
@@ -125,39 +118,28 @@ class MainActivity : ComponentActivity() {
             onPauseOrDispose { }
         }
 
-        NavHost(nav, startDestination = "home") {
-            composable("home") {
-                HomeScreen(
-                    state,
-                    HomeActions(
-                        onQueryChange = vm::onQueryChange,
-                        onTagSelected = vm::onTagSelected,
-                        onOpen = { nav.navigate("shot/${it.id}") },
-                        onAdd = { pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-                        onSettings = { nav.navigate("settings") },
-                        onAskPermission = { askPermission.launch(Permissions.readImages) },
-                        onBatteryGuide = { nav.navigate("battery") },
-                        onDismissBatteryTip = vm::dismissBatteryTip,
-                    ),
+        YaadNavHost(
+            state = state,
+            search = SearchActions(
+                onQueryChange = vm::onQueryChange,
+                onTagSelected = vm::onTagSelected,
+                onAskPermission = { askPermission.launch(Permissions.readImages) },
+                onDismissBatteryTip = vm::dismissBatteryTip,
+                onClearRecent = vm::clearRecent,
+            ),
+            onAdd = { pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+            onQueryUsed = vm::rememberQuery,
+            observeShot = vm::observeShot,
+            detailActions = { back ->
+                DetailActions(
+                    onBack = back,
+                    onOpenLink = ::openLink,
+                    onOpenInGallery = ::openInGallery,
+                    onDelete = { s -> vm.delete(s); back(); toast("Removed from Yaad") },
+                    onRetry = vm::retryFailed,
                 )
-            }
-            composable("shot/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) { entry ->
-                val id = entry.arguments!!.getLong("id")
-                val shot by remember(id) { vm.observeShot(id) }.collectAsStateWithLifecycle(initialValue = null)
-                shot?.let {
-                    DetailScreen(
-                        it,
-                        DetailActions(
-                            onBack = { nav.popBackStack() },
-                            onOpenLink = ::openLink,
-                            onOpenInGallery = ::openInGallery,
-                            onDelete = { s -> vm.delete(s); nav.popBackStack(); toast("Removed from Yaad") },
-                            onRetry = vm::retryFailed,
-                        ),
-                    )
-                }
-            }
-            composable("settings") {
+            },
+            settings = { back, toBattery ->
                 val theme by vm.theme.collectAsStateWithLifecycle()
                 SettingsScreen(
                     SettingsState(
@@ -169,15 +151,15 @@ class MainActivity : ComponentActivity() {
                         version = BuildConfigVersion.name(this@MainActivity),
                     ),
                     SettingsActions(
-                        onBack = { nav.popBackStack() },
+                        onBack = back,
                         onTheme = vm::setTheme,
-                        onBatteryGuide = { nav.navigate("battery") },
+                        onBatteryGuide = toBattery,
                         onScanNow = { AutoPick.scanNow(this@MainActivity); toast("Checking for new screenshots…") },
                         onRetryFailed = vm::retryFailed,
                     ),
                 )
-            }
-            composable("battery") {
+            },
+            battery = { back ->
                 var batteryOk by remember { mutableStateOf(Permissions.isBatteryUnrestricted(this@MainActivity)) }
                 LifecycleResumeEffect(Unit) {
                     batteryOk = Permissions.isBatteryUnrestricted(this@MainActivity)
@@ -187,13 +169,13 @@ class MainActivity : ComponentActivity() {
                     batteryOk,
                     ThisPhone.brand,
                     BatteryActions(
-                        onBack = { nav.popBackStack() },
+                        onBack = back,
                         onButton = ::openGuideButton,
                         onMoreHelp = { openLink(BatteryGuides.MORE_HELP_URL) },
                     ),
                 )
-            }
-        }
+            },
+        )
     }
 
     // ---------------- Doors to other apps ----------------
