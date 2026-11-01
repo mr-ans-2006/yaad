@@ -12,9 +12,9 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/03_search_light.png" width="220" alt="Search by meaning: &quot;a tool for data recovery&quot; finds the TestDisk and Recuva screenshots" />
-  <img src="docs/screenshots/06_detail_light.png" width="220" alt="Detail view of a Recuva screenshot with its key line, tags and a tappable recuva.com link" />
-  <img src="docs/screenshots/04_search_dark.png" width="220" alt="Dark mode: searching &quot;seafood place by the sea&quot; finds a Kolachi restaurant screenshot" />
+  <img src="docs/screenshots-v1.1/03_search_results_light.png" width="220" alt="Search tab: &quot;a tool for data recovery&quot; finds the TestDisk and Recuva screenshots" />
+  <img src="docs/screenshots-v1.1/05_folders_light.png" width="220" alt="Folders tab: one folder per auto-tag (Code, Tools, Places, Study and more) with a count and thumbnail previews" />
+  <img src="docs/screenshots-v1.1/10_detail_dark.png" width="220" alt="Dark mode: detail view of a Recuva screenshot with its key line, tags and a tappable recuva.com link" />
 </p>
 
 Yaad (یاد, "memory") is an open-source Android app that remembers your screenshots for you.
@@ -24,18 +24,24 @@ It reads the text in every screenshot, tags it, and lets you search by **meaning
 Everything happens on your phone. No account, no server, and **no internet permission at all**.
 
 <p align="center">
-  <img src="docs/screenshots/01_home_light.png" width="230" />
-  <img src="docs/screenshots/03_search_light.png" width="230" />
-  <img src="docs/screenshots/02_home_dark.png" width="230" />
+  <img src="docs/screenshots-v1.1/01_search_empty_light.png" width="230" alt="Search tab before typing: logo, search box and recent searches" />
+  <img src="docs/screenshots-v1.1/07_folder_all_light.png" width="230" alt="Inside the All folder: screenshots in a grid, grouped by date" />
+  <img src="docs/screenshots-v1.1/09_detail_light.png" width="230" alt="Detail view: the screenshot, its key line, tags and tappable links" />
 </p>
 <p align="center">
-  <img src="docs/screenshots/06_detail_light.png" width="230" />
-  <img src="docs/screenshots/08_onboarding.png" width="230" />
-  <img src="docs/screenshots/10_battery_guide.png" width="230" />
+  <img src="docs/screenshots-v1.1/02_search_empty_dark.png" width="175" alt="Dark mode: Search tab before typing" />
+  <img src="docs/screenshots-v1.1/04_search_results_dark.png" width="175" alt="Dark mode: search results for &quot;a tool for data recovery&quot;" />
+  <img src="docs/screenshots-v1.1/06_folders_dark.png" width="175" alt="Dark mode: Folders tab" />
+  <img src="docs/screenshots-v1.1/08_folder_tools_dark.png" width="175" alt="Dark mode: inside the Tools folder" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots-v1.1/yaad_v1.1_animations.gif" width="260" alt="Animation: a thumbnail grows into the full screenshot, shrinks back on Back, then switching to the Folders tab and opening a folder" />
 </p>
 
 <sub>These images are rendered from the app's real screen code on a computer (with Roborazzi),
-using sample screenshots as the gallery content.</sub>
+using sample screenshots as the gallery content. The animation is drawn frame by frame the same way,
+not recorded on a phone.</sub>
 
 ## Why I built this
 
@@ -45,6 +51,10 @@ I'm a CS student in Karachi, and Yaad is my attempt at fixing this for myself.
 
 ## What it does
 
+- **Two tabs.** **Search** is a clean screen: just the search box and your recent searches, and results
+  appear as you type. **Folders** sorts your screenshots by their auto-tags (plus All, Untagged and No text);
+  open a folder to see its screenshots in a grid, newest first, grouped by date. A screenshot with two tags
+  is in both folders.
 - **Auto-pick.** New screenshots are picked up on their own (from `DCIM/Screenshots`, `Pictures/Screenshots`,
   or any folder with "screenshot" in its name). You can also **share any image to Yaad**, or tap **Add**.
 - **Reads the text.** Google ML Kit's on-device text reader pulls out the English text.
@@ -54,7 +64,11 @@ I'm a CS student in Karachi, and Yaad is my attempt at fixing this for myself.
   and a word match makes sure exact names like "llama.cpp" still win.
 - **Open the original.** Pinch to zoom, links inside the screenshot are tappable, and "Open in gallery"
   takes you to the real file.
-- **Light and dark mode**, in a neo-brutalist look: thick outlines, hard shadows, flat bright colours.
+- **Smooth animations.** Opening a screenshot, the thumbnail grows into the full image, and Back shrinks it
+  home. Screens fade and slide gently, list items animate in and out, and cards shrink a touch when pressed.
+  With Android's "Remove animations" setting on, screens just swap.
+- **Light and dark mode**, in a soft neo-brutalist look: thin outlines, one hard shadow only on the main
+  elements, colour only on tags. Every word is in the **Inter** font.
 
 ## Architecture
 
@@ -124,7 +138,8 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Install
 
-1. Download [**Yaad-v1.0.apk**](https://github.com/mr-ans-2006/yaad/releases/download/v1.0/Yaad-v1.0.apk) (32 MB) from the [v1.0 release](https://github.com/mr-ans-2006/yaad/releases/tag/v1.0).
+1. Download [**Yaad-v1.1.apk**](https://github.com/mr-ans-2006/yaad/releases/download/v1.1/Yaad-v1.1.apk) (31 MB) from the [v1.1 release](https://github.com/mr-ans-2006/yaad/releases/tag/v1.1).
+   Already have v1.0? v1.1 installs over it and keeps your library (same signing key).
 2. Open it on your phone. Android will ask to allow installing from this source: allow it.
 3. Open Yaad, tap **Let's go**, allow photo access, and choose **Import all** or **Only new ones**.
 4. Follow the in-app **Battery guide** (Settings → Battery guide) so auto-pick keeps working while
@@ -132,7 +147,7 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
    every time you open it.
 
 Needs Android 8.0 or newer on a 64-bit (arm64) phone, which covers almost every phone from the last 6 years.
-The release APK is about 32 MB, mostly the text reader and the search model.
+The release APK is about 31 MB, mostly the text reader and the search model.
 
 ## Battery guide (keeping auto-pick awake)
 
@@ -155,9 +170,8 @@ optimisation or Yaad's app info). It never crashes. Yaad does **not** ask for th
 "ignore battery optimisations" permission; you stay in control of the switch.
 
 <p align="center">
-  <img src="docs/screenshots/13_battery_samsung.png" width="200" />
-  <img src="docs/screenshots/14_battery_xiaomi.png" width="200" />
-  <img src="docs/screenshots/15_battery_infinix_tecno.png" width="200" />
+  <img src="docs/screenshots-v1.1/12_battery_guide_light.png" width="230" alt="Battery guide on a Samsung phone: status box and the Samsung steps first" />
+  <img src="docs/screenshots-v1.1/13_battery_guide_dark.png" width="230" alt="Dark mode: battery guide on a Xiaomi phone" />
 </p>
 
 Phone not listed, or still stopping? [dontkillmyapp.com](https://dontkillmyapp.com) has detailed steps
@@ -223,7 +237,7 @@ cd yaad
 ./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
 ./gradlew :core:test             # tokenizer, search model, ranking, tags, key line
 ./gradlew :app:testDebugUnitTest # auto-pick logic against a pretend gallery
-./gradlew :app:recordRoborazziDebug   # re-draw the screenshots in docs/screenshots
+./gradlew :app:recordRoborazziDebug   # re-draw every screen to app/build/screenshots-v1.1
 ./gradlew :core:benchmark        # search speed at 500 / 1,000 / 2,000 screenshots
 ```
 
@@ -244,5 +258,5 @@ collections, backup) are in [docs/V2_IDEAS.md](docs/V2_IDEAS.md).
 
 ## License
 
-MIT © 2026 Ali Nawaz. Fonts: Pixelify Sans and Space Grotesk (SIL Open Font License).
+MIT © 2026 Ali Nawaz. Fonts: Inter and Noto Sans Arabic (SIL Open Font License).
 Search model: all-MiniLM-L6-v2 (Apache 2.0). Details in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
