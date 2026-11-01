@@ -23,17 +23,6 @@ It reads the text in every screenshot, tags it, and lets you search by **meaning
 
 Everything happens on your phone. No account, no server, and **no internet permission at all**.
 
-<p align="center">
-  <img src="docs/screenshots-v1.1/01_search_empty_light.png" width="230" alt="Search tab before typing: logo, search box and recent searches" />
-  <img src="docs/screenshots-v1.1/07_folder_all_light.png" width="230" alt="Inside the All folder: screenshots in a grid, grouped by date" />
-  <img src="docs/screenshots-v1.1/09_detail_light.png" width="230" alt="Detail view: the screenshot, its key line, tags and tappable links" />
-</p>
-<p align="center">
-  <img src="docs/screenshots-v1.1/02_search_empty_dark.png" width="175" alt="Dark mode: Search tab before typing" />
-  <img src="docs/screenshots-v1.1/04_search_results_dark.png" width="175" alt="Dark mode: search results for &quot;a tool for data recovery&quot;" />
-  <img src="docs/screenshots-v1.1/06_folders_dark.png" width="175" alt="Dark mode: Folders tab" />
-  <img src="docs/screenshots-v1.1/08_folder_tools_dark.png" width="175" alt="Dark mode: inside the Tools folder" />
-</p>
 
 <p align="center">
   <img src="docs/screenshots-v1.1/yaad_v1.1_animations.gif" width="260" alt="Animation: a thumbnail grows into the full screenshot, shrinks back on Back, then switching to the Folders tab and opening a folder" />
@@ -170,7 +159,6 @@ optimisation or Yaad's app info). It never crashes. Yaad does **not** ask for th
 "ignore battery optimisations" permission; you stay in control of the switch.
 
 <p align="center">
-  <img src="docs/screenshots-v1.1/12_battery_guide_light.png" width="230" alt="Battery guide on a Samsung phone: status box and the Samsung steps first" />
   <img src="docs/screenshots-v1.1/13_battery_guide_dark.png" width="230" alt="Dark mode: battery guide on a Xiaomi phone" />
 </p>
 
