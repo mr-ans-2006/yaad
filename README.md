@@ -31,23 +31,33 @@ Reading, tagging and search all run on your phone. There is no account, no serve
 
 ## Screenshots
 
+Real screenshots from the app running on an Oppo Reno 6 (Android 13):
+
 <p align="center">
-  <img src="docs/screenshots-v1.1/03_search_results_light.png" width="200" alt="Search tab: &quot;a tool for data recovery&quot; finds the TestDisk and Recuva screenshots" />
-  <img src="docs/screenshots-v1.1/05_folders_light.png" width="200" alt="Folders tab: one folder per tag with a count and thumbnail previews" />
-  <img src="docs/screenshots-v1.1/10_detail_dark.png" width="200" alt="Dark mode: a screenshot's key line, tags and a tappable link" />
+  <img src="docs/screenshots-real/01_search.jpg" width="30%" alt="Search tab: &quot;Save now. Find anytime.&quot;, a search box and the number of screenshots remembered" />
+  <img src="docs/screenshots-real/02_results.jpg" width="30%" alt="Search results for &quot;tools&quot; with tag filter chips and result cards" />
+  <img src="docs/screenshots-real/03_memory_detail.jpg" width="30%" alt="Memory detail: the screenshot, its key line and its tags" />
 </p>
 <p align="center">
-  <sub><b>Search by meaning</b> &nbsp;·&nbsp; <b>Folders by tag</b> &nbsp;·&nbsp; <b>Key line, tags and links</b> (dark mode)</sub>
+  <sub><b>Search</b> &nbsp;·&nbsp; <b>Results</b> &nbsp;·&nbsp; <b>Memory detail</b> (key line + tags)</sub>
 </p>
+
+<p align="center">
+  <img src="docs/screenshots-real/04_folders.jpg" width="30%" alt="Folders tab: All, Code, Tools, Places and more, each with a count" />
+  <img src="docs/screenshots-real/05_settings.jpg" width="30%" alt="Settings: theme, auto-pick with the battery guide, library count and privacy note" />
+</p>
+<p align="center">
+  <sub><b>Folders</b> &nbsp;·&nbsp; <b>Settings &amp; privacy</b></sub>
+</p>
+
+**Demo**
 
 <p align="center">
   <img src="docs/screenshots-v1.1/yaad_v1.1_animations.gif" width="240" alt="Animation: a thumbnail grows into the full screenshot, then switching to the Folders tab and opening a folder" />
   <br />
-  <sub>Opening a screenshot and browsing folders</sub>
+  <sub>Opening a screenshot and browsing folders. This animation is drawn from the app's real screen code
+  on a computer with sample content, not recorded on a phone.</sub>
 </p>
-
-<sub>These images come from the app's real screen code, drawn on a computer with Roborazzi and filled with
-sample screenshots. They are not mockups, but they were not captured on a phone either.</sub>
 
 ## Download & Installation
 
@@ -222,10 +232,6 @@ The buttons try to open the exact settings page for your brand. Phone makers mov
 versions, so if one isn't there, Yaad opens the closest standard Android page instead. Yaad does **not**
 ask for the special "ignore battery optimisations" permission. The guides are based on
 [dontkillmyapp.com](https://dontkillmyapp.com), which covers almost every phone.
-
-<p align="center">
-  <img src="docs/screenshots-v1.1/13_battery_guide_dark.png" width="220" alt="Dark mode: the battery guide" />
-</p>
 
 </details>
 
