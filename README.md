@@ -200,7 +200,11 @@ The code is in [`SearchRanker.kt`](core/src/main/kotlin/io/github/mrans2006/yaad
 |---|---|---|
 | Oppo Reno 6 | Android 13 | Works (tested by the developer) |
 
-Timing measurements from real devices will be added later.
+**Measured on the Oppo Reno 6** (timed by hand, one run, not a formal benchmark):
+
+| Test | Result |
+|---|---|
+| First import of 109 existing screenshots (text reading, tagging and search indexing) | 49.3 s (about 0.45 s per screenshot) |
 
 **Other devices are untested.** Android 8.0 is the minimum version the app is built for, which is not the
 same as a tested compatibility claim. If you try Yaad on another phone, please
