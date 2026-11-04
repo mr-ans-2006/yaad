@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <!-- hard shadow -->
-    <path android:fillColor="#111111" android:pathData="M37,37h42v42h-42z"/>
-    <!-- card with thick outline -->
-    <path android:fillColor="#111111" android:pathData="M31,31h42v42h-42z"/>
-    <path android:fillColor="#00000000" android:pathData="M34,34h36v36h-36z"/>
-    <!-- pixel Y -->
-    <path android:fillColor="#111111" android:pathData="M40.25,41.25h5.5v5.5h-5.5zM62.25,41.25h5.5v5.5h-5.5zM40.25,46.75h5.5v5.5h-5.5zM62.25,46.75h5.5v5.5h-5.5zM45.75,52.25h5.5v5.5h-5.5zM56.75,52.25h5.5v5.5h-5.5zM51.25,57.75h5.5v5.5h-5.5zM51.25,63.25h5.5v5.5h-5.5z"/>
-    <!-- pink folder tab -->
-    <path android:fillColor="#111111" android:pathData="M36,25h16v6h-16z"/>
-    <path android:fillColor="#111111" android:pathData="M38,27h12v4h-12z"/>
+    <!-- Single-colour themed icon: the card with eyes, magnifier, smile and folded corner cut out -->
+    <group android:scaleX="0.08" android:scaleY="0.08" android:translateX="15.120" android:translateY="12.120">
+        <path android:fillColor="#FF000000" android:fillType="evenOdd" android:pathData="M300,195 H600 L744,339 V780 Q744,852 672,852 H300 Q228,852 228,780 V267 Q228,195 300,195ZM322,520a58,58 0 1,0 116,0a58,58 0 1,0 -116,0zM506,500a84,84 0 1,0 168,0a84,84 0 1,0 -168,0zM666,552 L720,606 L692,634 L638,580ZM392,636 Q470,706 548,636 L548,668 Q470,738 392,668ZM594,215 L606,215 L606,333 L725,333 L725,345 L594,345Z"/>
+        <path android:fillColor="#FF000000" android:pathData="M354,520a26,26 0 1,0 52,0a26,26 0 1,0 -52,0z"/>
+        <path android:fillColor="#FF000000" android:pathData="M550,500a40,40 0 1,0 80,0a40,40 0 1,0 -80,0z"/>
+    </group>
 </vector>

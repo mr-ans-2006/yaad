@@ -2,6 +2,7 @@
 <resources>
     <color name="paper">#FFFBF7EE</color>
     <color name="night">#FF171512</color>
+    <color name="icon_cream">#FFFBF7EE</color>
     <color name="yellow">#FFFFD23F</color>
     <color name="ink">#FF1C1B19</color>
 </resources>

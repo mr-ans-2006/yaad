@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <!-- hard shadow -->
-    <path android:fillColor="#111111" android:pathData="M37,37h42v42h-42z"/>
-    <!-- card with thick outline -->
-    <path android:fillColor="#111111" android:pathData="M31,31h42v42h-42z"/>
-    <path android:fillColor="#FFFFFF" android:pathData="M34,34h36v36h-36z"/>
-    <!-- pixel Y -->
-    <path android:fillColor="#111111" android:pathData="M40.25,41.25h5.5v5.5h-5.5zM62.25,41.25h5.5v5.5h-5.5zM40.25,46.75h5.5v5.5h-5.5zM62.25,46.75h5.5v5.5h-5.5zM45.75,52.25h5.5v5.5h-5.5zM56.75,52.25h5.5v5.5h-5.5zM51.25,57.75h5.5v5.5h-5.5zM51.25,63.25h5.5v5.5h-5.5z"/>
-    <!-- pink folder tab -->
-    <path android:fillColor="#111111" android:pathData="M36,25h16v6h-16z"/>
-    <path android:fillColor="#FF8FD8" android:pathData="M38,27h12v4h-12z"/>
+    <!-- Yaad "screenshot buddy": artwork drawn in a 1024 grid, scaled into the adaptive-icon safe zone -->
+    <group android:scaleX="0.075" android:scaleY="0.075" android:translateX="15.825" android:translateY="12.562">
+        <group android:translateY="6">
+            <!-- hard shadow -->
+            <path android:fillColor="#1C1B19" android:pathData="M346,241 H646 L790,385 V826 Q790,898 718,898 H346 Q274,898 274,826 V313 Q274,241 346,241Z"/>
+            <!-- card -->
+            <path android:fillColor="#FFFFFF" android:strokeColor="#1C1B19" android:strokeWidth="22" android:strokeLineJoin="round" android:pathData="M300,195 H600 L744,339 V780 Q744,852 672,852 H300 Q228,852 228,780 V267 Q228,195 300,195Z"/>
+            <!-- pink folded corner -->
+            <path android:fillColor="#F7B5DA" android:strokeColor="#1C1B19" android:strokeWidth="22" android:strokeLineJoin="round" android:pathData="M600,195 L744,339 H672 Q600,339 600,267Z"/>
+            <!-- left eye -->
+            <path android:fillColor="#1C1B19" android:pathData="M322,520a58,58 0 1,0 116,0a58,58 0 1,0 -116,0z"/>
+            <path android:fillColor="#FFFFFF" android:pathData="M380,499a19,19 0 1,0 38,0a19,19 0 1,0 -38,0z"/>
+            <!-- magnifier eye -->
+            <path android:fillColor="#B9E8C6" android:strokeColor="#1C1B19" android:strokeWidth="34" android:pathData="M506,500a84,84 0 1,0 168,0a84,84 0 1,0 -168,0z"/>
+            <path android:fillColor="#1C1B19" android:pathData="M566,508a38,38 0 1,0 76,0a38,38 0 1,0 -76,0z"/>
+            <path android:fillColor="#FFFFFF" android:pathData="M605,493a13,13 0 1,0 26,0a13,13 0 1,0 -26,0z"/>
+            <path android:strokeColor="#1C1B19" android:strokeWidth="40" android:strokeLineCap="round" android:pathData="M652,566 L706,620"/>
+            <!-- smile -->
+            <path android:strokeColor="#1C1B19" android:strokeWidth="28" android:strokeLineCap="round" android:pathData="M392,652 Q470,722 548,652"/>
+            <!-- cheek -->
+            <path android:fillColor="#F7B5DA" android:pathData="M272,632a28,28 0 1,0 56,0a28,28 0 1,0 -56,0z"/>
+        </group>
+    </group>
 </vector>
